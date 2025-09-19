@@ -1,8 +1,6 @@
 site_name: NIIMBOT Community Wiki
 repo_url: https://github.com/MultiMote/niimbot-wiki
-
-# repo_url: https://gitee.mmote.ru/MultiMote/niimbot-wiki
-# edit_uri: _edit/main/docs
+edit_uri: edit/main/docs
 
 extra_css:
   - css/custom.css
