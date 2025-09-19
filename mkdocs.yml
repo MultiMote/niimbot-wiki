@@ -1,0 +1,44 @@
+site_name: NIIMBOT Community Wiki
+repo_url: https://github.com/MultiMote/niimbot-wiki
+
+# repo_url: https://gitee.mmote.ru/MultiMote/niimbot-wiki
+# edit_uri: _edit/main/docs
+
+extra_css:
+  - css/custom.css
+
+theme:
+  name: readthedocs
+  highlightjs: true
+  hljs_languages:
+    - yaml
+    - c
+    - cpp
+    - http
+
+markdown_extensions:
+  - admonition
+  - pymdownx.magiclink
+  - pymdownx.emoji
+  - footnotes
+
+plugins:
+  search:
+  literate-nav:
+  unused_files:
+    excluded_files:
+      - "custom.css"
+      - "*.svg"
+
+nav:
+  - 'index.md'
+  - Interfacing:
+      - interfacing/connecting.md
+      - interfacing/proto.md
+      - interfacing/print-tasks.md
+      - "interfacing/*.md"
+
+  - Hardware: hardware/
+  - Firmware: firmware/
+  - Other: other/
+
