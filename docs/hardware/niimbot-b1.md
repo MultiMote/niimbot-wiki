@@ -14,6 +14,7 @@
 | Print direction                          | top          |
 | [Paper types](/interfacing/paper-types/) | 1,2,5        |
 | Density range                            | 1-[3]-5      |
+| Printer type                             | thermal      |
 <!-- END CLOUD_INFO -->
 
 ## HW 5.10

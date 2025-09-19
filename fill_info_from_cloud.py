@@ -27,6 +27,14 @@ def transform_model_info(model):
         0: "top",
     }
 
+    type_dict = {
+        "热转印打印机": "thermal transfer",
+        "热敏打印机": "thermal",
+        "线号机": "wire marking",
+        "电子价签": "electronic price tag",
+        "热敏及热转印打印机": "thermal transfer"
+    }
+
     out = {}
 
     out["name"] = model["name"]
@@ -39,7 +47,7 @@ def transform_model_info(model):
     out["dir"] = dir_dict[model["printDirection"]]
     out["papers"] = model["paperType"]
     out["density"] = f"{model['solubilitySetStart']}-[{model['solubilitySetDefault']}]-{model['solubilitySetEnd']}"
-
+    out["type"] = type_dict[model["modelName"]]
     return out
 
 
@@ -65,19 +73,20 @@ for dir_name, _, files in os.walk("docs"):
             model = next(m for m in model_list if m["name"] == printer_name)
 
             if model is not None:
-                info2 = transform_model_info(model)
+                info = transform_model_info(model)
 
                 header = ["Parameter", "Value"]
                 data = [
-                    ["ID", info2["id"]],
-                    ["DPI", info2["dpi"]],
+                    ["ID", info["id"]],
+                    ["DPI", info["dpi"]],
                     [
                         "Printhead size",
-                        f"{info2['head_mm']}mm ({info2['head_px']}px)",
+                        f"{info['head_mm']}mm ({info['head_px']}px)",
                     ],
-                    ["Print direction", info2["dir"]],
-                    ["[Paper types](/interfacing/paper-types/)", info2["papers"]],
-                    ["Density range", info2["density"]],
+                    ["Print direction", info["dir"]],
+                    ["[Paper types](/interfacing/paper-types/)", info["papers"]],
+                    ["Density range", info["density"]],
+                    ["Printer type", info["type"]],
                 ]
                 table = tabulate(data, header, tablefmt="github")
             else:
@@ -96,6 +105,7 @@ for dir_name, _, files in os.walk("docs"):
                 "Print direction",
                 "[Paper types](/interfacing/paper-types/)",
                 "Density range",
+                "Printer type",
             ]
 
             data = []
@@ -111,6 +121,7 @@ for dir_name, _, files in os.walk("docs"):
                         info["dir"],
                         info["papers"],
                         info['density'],
+                        info['type'],
                     ]
                 )
 
