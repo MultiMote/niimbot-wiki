@@ -10,10 +10,11 @@
 | Parameter                                | Value       |
 |------------------------------------------|-------------|
 | ID                                       | 2304, 2305  |
-| [Paper types](/interfacing/paper-types/) | 1,5         |
 | DPI                                      | 203         |
 | Printhead size                           | 12mm (96px) |
 | Print direction                          | left        |
+| [Paper types](/interfacing/paper-types/) | 1,5         |
+| Density range                            | 1-[2]-3     |
 <!-- END CLOUD_INFO -->
 
 # HW 13.10

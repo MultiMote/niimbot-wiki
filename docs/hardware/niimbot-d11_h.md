@@ -9,10 +9,11 @@
 | Parameter                                | Value        |
 |------------------------------------------|--------------|
 | ID                                       | 528          |
-| [Paper types](/interfacing/paper-types/) | 1,5          |
 | DPI                                      | **300**      |
 | Printhead size                           | 12mm (142px) |
 | Print direction                          | left         |
+| [Paper types](/interfacing/paper-types/) | 1,5          |
+| Density range                            | 1-[3]-5      |
 <!-- END CLOUD_INFO -->
 
 ## HW

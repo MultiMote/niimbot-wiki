@@ -9,10 +9,11 @@
 | Parameter                                | Value        |
 |------------------------------------------|--------------|
 | ID                                       | 771, 775     |
-| [Paper types](/interfacing/paper-types/) | 1,3,5,2      |
 | DPI                                      | 203          |
 | Printhead size                           | 48mm (384px) |
 | Print direction                          | top          |
+| [Paper types](/interfacing/paper-types/) | 1,3,5,2      |
+| Density range                            | 1-[3]-5      |
 <!-- END CLOUD_INFO -->
 
 ## HW 40.10

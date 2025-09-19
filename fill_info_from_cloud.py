@@ -38,9 +38,7 @@ def transform_model_info(model):
     )
     out["dir"] = dir_dict[model["printDirection"]]
     out["papers"] = model["paperType"]
-    out["density_min"] = model["solubilitySetStart"]
-    out["density_max"] = model["solubilitySetEnd"]
-    out["density_default"] = model["solubilitySetDefault"]
+    out["density"] = f"{model['solubilitySetStart']}-[{model['solubilitySetDefault']}]-{model['solubilitySetEnd']}"
 
     return out
 
@@ -72,13 +70,14 @@ for dir_name, _, files in os.walk("docs"):
                 header = ["Parameter", "Value"]
                 data = [
                     ["ID", info2["id"]],
-                    ["[Paper types](/interfacing/paper-types/)", info2["papers"]],
                     ["DPI", info2["dpi"]],
                     [
                         "Printhead size",
                         f"{info2['head_mm']}mm ({info2['head_px']}px)",
                     ],
                     ["Print direction", info2["dir"]],
+                    ["[Paper types](/interfacing/paper-types/)", info2["papers"]],
+                    ["Density range", info2["density"]],
                 ]
                 table = tabulate(data, header, tablefmt="github")
             else:
@@ -97,7 +96,6 @@ for dir_name, _, files in os.walk("docs"):
                 "Print direction",
                 "[Paper types](/interfacing/paper-types/)",
                 "Density range",
-                "Default density",
             ]
 
             data = []
@@ -112,8 +110,7 @@ for dir_name, _, files in os.walk("docs"):
                         f"{info['head_mm']}mm ({info['head_px']}px)",
                         info["dir"],
                         info["papers"],
-                        f"{info['density_min']}-{info['density_max']}",
-                        info["density_default"],
+                        info['density'],
                     ]
                 )
 
