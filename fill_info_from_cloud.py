@@ -4,23 +4,45 @@ from requests import get
 from tabulate import tabulate
 import math
 
-dir_dict = {
-    270: "left",
-    180: "top",
-    90: "left",
-    0: "top",
-}
-
-ppmm_dict = {
-    "203": 8,
-    "300": 11.81,
-}
 
 resp = get("https://print.niimbot.com/api/hardware/list")
 resp.raise_for_status()
 model_list = resp.json()["data"]["list"]
 for m in model_list:
     m["name"] = re.sub(r"[\s\-]", "_", m["name"]).upper()
+
+model_list.sort(key=lambda m: m["name"])
+
+
+def transform_model_info(model):
+    ppmm_dict = {
+        "203": 8,
+        "300": 11.81,
+    }
+
+    dir_dict = {
+        270: "left",
+        180: "top",
+        90: "left",
+        0: "top",
+    }
+
+    out = {}
+
+    out["name"] = model["name"]
+    out["id"] = ", ".join([str(i) for i in model["codes"]])
+    out["head_mm"] = model["widthSetEnd"]
+    out["head_px"] = math.ceil(model["widthSetEnd"] * ppmm_dict[model["paccuracyName"]])
+    out["dpi"] = (
+        "**300**" if model["paccuracyName"] == "300" else model["paccuracyName"]
+    )
+    out["dir"] = dir_dict[model["printDirection"]]
+    out["papers"] = model["paperType"]
+    out["density_min"] = model["solubilitySetStart"]
+    out["density_max"] = model["solubilitySetEnd"]
+    out["density_default"] = model["solubilitySetDefault"]
+
+    return out
 
 
 for dir_name, _, files in os.walk("docs"):
@@ -36,37 +58,79 @@ for dir_name, _, files in os.walk("docs"):
         if "<!-- BEGIN" not in file_contents:
             continue
 
-        def replace_info(match):
+        def replace_single_printer_info(match):
             start, printer_name, end = match.groups()
-            print("Filling ", printer_name, "block in", file_name)
+            print("Filling", printer_name, "block in", file_name)
 
             table = "ERROR"
 
-            info = next(m for m in model_list if m["name"] == printer_name)
-            if info is not None:
-                head_px = math.ceil(
-                    info["widthSetEnd"] * ppmm_dict[info["paccuracyName"]]
-                )
+            model = next(m for m in model_list if m["name"] == printer_name)
+
+            if model is not None:
+                info2 = transform_model_info(model)
 
                 header = ["Parameter", "Value"]
                 data = [
-                    ["ID", ", ".join([str(i) for i in info["codes"]])],
-                    ["Supported paper types", info["paperType"]],
-                    ["DPI", info["paccuracyName"]],
+                    ["ID", info2["id"]],
+                    ["[Paper types](/interfacing/paper-types/)", info2["papers"]],
+                    ["DPI", info2["dpi"]],
                     [
                         "Printhead size",
-                        f"{info['widthSetEnd']}mm ({head_px}px)",
+                        f"{info2['head_mm']}mm ({info2['head_px']}px)",
                     ],
-                    ["Print direction", dir_dict[info["printDirection"]]],
+                    ["Print direction", info2["dir"]],
                 ]
                 table = tabulate(data, header, tablefmt="github")
             else:
                 print("Model", printer_name, "not found")
             return f"{start}<!-- Auto-generated, do not edit -->\n{table}\n{end}"
 
+        def replace_all_printers_info(match):
+            start, end = match.groups()
+            print("Filling printers table in", file_name)
+
+            header = [
+                "Name",
+                "ID",
+                "DPI",
+                "Printhead size",
+                "Print direction",
+                "[Paper types](/interfacing/paper-types/)",
+                "Density range",
+                "Default density",
+            ]
+
+            data = []
+
+            for model in model_list:
+                info = transform_model_info(model)
+                data.append(
+                    [
+                        info["name"],
+                        info["id"],
+                        info["dpi"],
+                        f"{info['head_mm']}mm ({info['head_px']}px)",
+                        info["dir"],
+                        info["papers"],
+                        f"{info['density_min']}-{info['density_max']}",
+                        info["density_default"],
+                    ]
+                )
+
+            table = tabulate(data, header, tablefmt="github")
+
+            return f"{start}<!-- Auto-generated, do not edit -->\n{table}\n{end}"
+
         file_contents = re.sub(
             r"(<!-- BEGIN (\w+) CLOUD_INFO -->\n).*?(<!-- END CLOUD_INFO -->\n)",
-            replace_info,
+            replace_single_printer_info,
+            file_contents,
+            flags=re.DOTALL,
+        )
+
+        file_contents = re.sub(
+            r"(<!-- BEGIN CLOUD_PRINTERS_TABLE -->\n).*?(<!-- END CLOUD_PRINTERS_TABLE -->\n)",
+            replace_all_printers_info,
             file_contents,
             flags=re.DOTALL,
         )

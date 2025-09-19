@@ -6,13 +6,13 @@
 
 <!-- BEGIN D110_M CLOUD_INFO -->
 <!-- Auto-generated, do not edit -->
-| Parameter             | Value       |
-|-----------------------|-------------|
-| ID                    | 2320        |
-| Supported paper types | 1,5         |
-| DPI                   | 203         |
-| Printhead size        | 12mm (96px) |
-| Print direction       | left        |
+| Parameter                                | Value       |
+|------------------------------------------|-------------|
+| ID                                       | 2320        |
+| [Paper types](/interfacing/paper-types/) | 1,5         |
+| DPI                                      | 203         |
+| Printhead size                           | 12mm (96px) |
+| Print direction                          | left        |
 <!-- END CLOUD_INFO -->
 
 ## HW
@@ -21,7 +21,7 @@
 | --------------------- | --------------------------------------------- |
 | MCU                   | [YiCHiP YC3122-L](http://www.yichip.com/yc3x) |
 | Firmware base address | 0x8001000                                     |
-| Firmware file shift   | 0x1C                                          |
+| Firmware file offset  | 0x1C                                          |
 
 
 ![pcb_top](files/d110_m/d110_m_pcb_top.jpg)
