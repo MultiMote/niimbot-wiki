@@ -1,4 +1,6 @@
 site_name: NIIMBOT Community Wiki
+site_url: https://printers.niim.blue/
+
 repo_url: https://github.com/MultiMote/niimbot-wiki
 edit_uri: edit/main/docs
 
