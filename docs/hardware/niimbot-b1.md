@@ -23,7 +23,7 @@
 | Parameter             | Value                                         |
 |-----------------------|-----------------------------------------------|
 | MCU                   | [YiCHiP YC3121-L](http://www.yichip.com/yc3x) |
-| Firmware base address | 0x8001000                                     |
+| Firmware base address | 0x01010000                                    |
 | Firmware file offset  | 0                                             |
 
 
