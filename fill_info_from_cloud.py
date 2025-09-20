@@ -3,6 +3,7 @@ import re
 from requests import get
 from tabulate import tabulate
 import math
+from os.path import relpath
 
 
 resp = get("https://print.niimbot.com/api/hardware/list")
@@ -50,13 +51,16 @@ def transform_model_info(model):
     out["type"] = type_dict[model["modelName"]]
     return out
 
+root = "./docs"
 
-for dir_name, _, files in os.walk("docs"):
+for dir_name, _, files in os.walk(root):
     for file_name in files:
         if not file_name.endswith(".md"):
             continue
 
         file_path = os.path.join(dir_name, file_name)
+
+        root_rel = relpath(root, dir_name).replace("\\", "/")
 
         with open(file_path, encoding="utf-8") as f:
             file_contents = f.read()
@@ -84,7 +88,7 @@ for dir_name, _, files in os.walk("docs"):
                         f"{info['head_mm']}mm ({info['head_px']}px)",
                     ],
                     ["Print direction", info["dir"]],
-                    ["[Paper types](/interfacing/paper-types/)", info["papers"]],
+                    [f"[Paper types]({root_rel}/interfacing/paper-types.md)", info["papers"]],
                     ["Density range", info["density"]],
                     ["Printer type", info["type"]],
                 ]
@@ -103,7 +107,7 @@ for dir_name, _, files in os.walk("docs"):
                 "DPI",
                 "Printhead size",
                 "Print direction",
-                "[Paper types](/interfacing/paper-types/)",
+                f"[Paper types]({root_rel}/interfacing/paper-types.md)",
                 "Density range",
                 "Printer type",
             ]

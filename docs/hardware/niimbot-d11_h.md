@@ -6,15 +6,15 @@
 
 <!-- BEGIN D11_H CLOUD_INFO -->
 <!-- Auto-generated, do not edit -->
-| Parameter                                | Value        |
-|------------------------------------------|--------------|
-| ID                                       | 528          |
-| DPI                                      | **300**      |
-| Printhead size                           | 12mm (142px) |
-| Print direction                          | left         |
-| [Paper types](/interfacing/paper-types/) | 1,5          |
-| Density range                            | 1-[3]-5      |
-| Printer type                             | thermal      |
+| Parameter                                    | Value        |
+|----------------------------------------------|--------------|
+| ID                                           | 528          |
+| DPI                                          | **300**      |
+| Printhead size                               | 12mm (142px) |
+| Print direction                              | left         |
+| [Paper types](../interfacing/paper-types.md) | 1,5          |
+| Density range                                | 1-[3]-5      |
+| Printer type                                 | thermal      |
 <!-- END CLOUD_INFO -->
 
 ## HW

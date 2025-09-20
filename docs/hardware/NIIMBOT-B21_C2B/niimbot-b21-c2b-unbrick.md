@@ -24,7 +24,7 @@ firmware consists of several parts:
 
 1.  `0x00000000` - bootloader
 2.  `0x08002000` - main firmware
-3.  `0x0803f000` - Section with serial number, MAC address, and other per-device data
+3.  `0x0803f000` - section with serial number, MAC address, and other per-device data
 
 ### Main firmware
 
@@ -102,7 +102,7 @@ Compiled bootloader: [AT32F403A_bootloader_min.hex](../files/b21_c2b/unbrick/AT3
 
 ### Section with unique printer data
 
-Its position and structure are unknown.
+Structure is unknown.
 
 This section is lost when disabling microcontroller protection.
 At best, the printer will think its serial number is all ones.

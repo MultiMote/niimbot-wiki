@@ -34,9 +34,12 @@ nav:
       - interfacing/connecting.md
       - interfacing/proto.md
       - interfacing/print-tasks.md
-      - "interfacing/*.md"
+      - "interfacing/*"
 
-  - Hardware: hardware/
+  - Hardware:
+      - "hardware/models.md"
+      - "hardware/*"
+
   - Firmware: firmware/
   - Other: other/
 
