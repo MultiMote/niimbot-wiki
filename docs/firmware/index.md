@@ -24,3 +24,5 @@ Applies to new firmware files starting with `0x18` byte. Byte order is little en
 | 0x16   | 2      | 10 03       | Unknown                                                          |
 | 0x18   | 4      | FC E8 23 77 | CRC32 of previous data where bytes at 0x01-0x03 threated as zero |
 | 0x1C   | ?      | 00 51 03 .. | Firmware data                                                    |
+
+[ImHex pattern](files/niimbot_fw.hexpat)
