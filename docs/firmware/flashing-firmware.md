@@ -7,7 +7,7 @@
 
 ## Easy way - NiimBlue
 
-Open [niim.blue](https://niim.blue), connect yor printer and use printer menu to flash the firmware[^1].
+Open [niim.blue](https://niim.blue), connect your printer and use printer menu to flash the firmware[^1].
 
 ![niimblue-fw](files/flashing/niimblue-fw.png)
 
