@@ -15,6 +15,7 @@ theme:
     - c
     - cpp
     - http
+    - python
 
 markdown_extensions:
   - admonition
