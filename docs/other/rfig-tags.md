@@ -1,5 +1,21 @@
 # Label RFID tags
 
+## Tricking the printer to not increment the counter
+
+This may not work on all models/firmware versions. This will not work with the official app, as the counter there is synchronized with the cloud.
+
+This method allows you to print on any thermal paper without using up the print counter.
+
+- First, carefully remove the RFID tag from the roll if it is inside it.
+- Open the printer lid.
+- Place the RFID tag on the **outer** surface of the printer case, in the area closest to the antenna (usually the bottom).
+- Close the printer lid. The printer should calibrate the paper gap as usual.
+- Put the RFID tag away.
+
+Do not bring the RFID tag close to the case again until it is turned off or the cover is opened, otherwise all missed prints will be recorded in the tag.
+
+## RFID tag structure
+
 todo [^1]
 
 
