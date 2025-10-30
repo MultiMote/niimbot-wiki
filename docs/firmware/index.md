@@ -26,3 +26,5 @@ Applies to new firmware files starting with `0x18` byte. Byte order is little en
 | 0x1C   | ?      | 00 51 03 .. | Firmware data                                                    |
 
 [ImHex pattern](files/niimbot_fw.hexpat)
+
+[Firmware header editor](header-editor.html) (works in browser)

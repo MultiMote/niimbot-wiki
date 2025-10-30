@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NIIMBOT firmware header edit</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+      }
+      body {
+        font-size: 16px;
+        font-family: Arial, Helvetica, sans-serif;
+      }
+
+      .container {
+        margin: 0 auto;
+        margin-top: 32px;
+        max-width: 1280px;
+      }
+
+      .block {
+        margin-bottom: 16px;
+      }
+      label {
+        display: block;
+      }
+      table {
+        border-collapse: collapse;
+      }
+      td,
+      th {
+        border: 1px solid #e1e4e5 !important;
+        margin: 0;
+        overflow: visible;
+        padding: 8px 16px;
+      }
+      tr:nth-child(2n-1) td {
+        background-color: #f3f6f6;
+      }
+      .hidden {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="block">
+        <a href="https://printers.niim.blue/firmware/">https://printers.niim.blue/firmware/</a>
+      </div>
+
+      <div class="block">
+        <label for="fw-in">Source firmware</label>
+        <input type="file" id="fw-in" />
+      </div>
+
+      <div class="block">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Offset</th>
+              <th>Length</th>
+              <th>Data</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>0x00</td>
+              <td>1</td>
+              <td class="data sign"></td>
+              <td>Signature</td>
+            </tr>
+            <tr>
+              <td>0x01</td>
+              <td>3</td>
+              <td class="data rand"></td>
+              <td>Some random data, threat as zero when calculating header CRC</td>
+            </tr>
+            <tr>
+              <td>0x04</td>
+              <td>4</td>
+              <td class="data data-len"></td>
+              <td>Length of firmware data</td>
+            </tr>
+            <tr>
+              <td>0x08</td>
+              <td>4</td>
+              <td>
+                <span class="data fw-crc"></span>
+                <button class="fix crc-fix crc-fix-fw hidden">Fix</button>
+              </td>
+              <td>CRC32 of firmware data</td>
+            </tr>
+            <tr>
+              <td>0x0C</td>
+              <td>4</td>
+              <td class="data unk1"></td>
+              <td>Unknown</td>
+            </tr>
+            <tr>
+              <td>0x10</td>
+              <td>4</td>
+              <td class="data unk2"></td>
+              <td>Unknown</td>
+            </tr>
+            <tr>
+              <td>0x14</td>
+              <td>2</td>
+              <td>
+                <span class="data fw-ver"></span>
+                <button class="fix ver-edit hidden">Edit</button>
+              </td>
+              <td>Firmware Version</td>
+            </tr>
+            <tr>
+              <td>0x16</td>
+              <td>2</td>
+              <td class="data unk3"></td>
+              <td>Unknown</td>
+            </tr>
+            <tr>
+              <td>0x18</td>
+              <td>4</td>
+              <td>
+                <span class="data crc-header"></span>
+                <button class="fix crc-fix crc-fix-header hidden">Fix</button>
+              </td>
+              <td>CRC32 of previous data where bytes at 0x01-0x03 threated as zero</td>
+            </tr>
+            <tr>
+              <td>0x1C</td>
+              <td class="data fw-len-int"></td>
+              <td class="data fw-bytes"></td>
+              <td>Firmware data</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="block">
+        <button class="export hidden">Export</button>
+      </div>
+    </div>
+
+    <script>
+      const fwInEl = document.querySelector("#fw-in");
+      const tableEl = document.querySelector(".table");
+      const exportEl = document.querySelector(".export");
+
+      let fwHeader = new Uint8Array();
+      let fwBody = new Uint8Array();
+      let filename = "";
+
+      const numberToHex = (n) => {
+        const hex = n.toString(16);
+        return hex.length === 1 ? `0${hex}` : hex;
+      };
+
+      const bufToHex = (buf, separator = " ") => {
+        return Array.from(buf)
+          .map((n) => numberToHex(n))
+          .join(separator);
+      };
+
+      const u32ToBytes = (n) => {
+        return [(n >> 24) & 0xff, (n >> 16) & 0xff, (n >> 8) & 0xff, n & 0xff];
+      };
+
+      const u8ArraysEqual = (a, b) => {
+        return a.length === b.length && a.every((el, i) => el === b[i]);
+      };
+
+      const makeCRCTable = function () {
+        let c;
+        const crcTable = [];
+        for (let n = 0; n < 256; n++) {
+          c = n;
+          for (let k = 0; k < 8; k++) {
+            c = c & 1 ? 0xedb88320 ^ (c >>> 1) : c >>> 1;
+          }
+          crcTable[n] = c;
+        }
+        return crcTable;
+      };
+
+      const crcTable = makeCRCTable();
+
+      const crc32 = (arr) => {
+        let crc = 0 ^ -1;
+        for (const element of arr) {
+          crc = (crc >>> 8) ^ crcTable[(crc ^ element) & 0xff];
+        }
+        return (crc ^ -1) >>> 0;
+      };
+
+      const refreshTable = () => {
+        tableEl.querySelectorAll(".fix").forEach((e) => e.classList.add("hidden"));
+        exportEl.classList.remove("hidden");
+
+        tableEl.querySelectorAll(".fix.ver-edit").forEach((e) => e.classList.remove("hidden"));
+
+        const verNumber = (fwHeader[0x15] << 8) + fwHeader[0x14];
+
+        tableEl.querySelector(".data.sign").textContent = bufToHex(fwHeader.slice(0x00, 0x01));
+        tableEl.querySelector(".data.rand").textContent = bufToHex(fwHeader.slice(0x01, 0x04));
+        tableEl.querySelector(".data.data-len").textContent = bufToHex(fwHeader.slice(0x04, 0x08));
+        tableEl.querySelector(".data.fw-crc").textContent = bufToHex(fwHeader.slice(0x08, 0x0c));
+        tableEl.querySelector(".data.unk1").textContent = bufToHex(fwHeader.slice(0x0c, 0x10));
+        tableEl.querySelector(".data.unk2").textContent = bufToHex(fwHeader.slice(0x10, 0x14));
+        tableEl.querySelector(".data.fw-ver").textContent = `${bufToHex(fwHeader.slice(0x14, 0x16))} (${(verNumber / 100).toFixed(2)})`;
+        tableEl.querySelector(".data.unk3").textContent = bufToHex(fwHeader.slice(0x16, 0x18));
+        tableEl.querySelector(".data.crc-header").textContent = bufToHex(fwHeader.slice(0x18, 0x1c));
+        tableEl.querySelector(".data.fw-bytes").textContent = bufToHex(fwBody.slice(0x00, 0x04)) + " ...";
+        tableEl.querySelector(".data.fw-len-int").textContent = `${fwBody.length}`;
+
+        const fwCrc = calcFwCrc();
+        const headerCrc = calcHeaderCrc();
+
+        const fwCrcOk = u8ArraysEqual(fwCrc, fwHeader.slice(0x08, 0x0c));
+        const headerCrcOk = u8ArraysEqual(headerCrc, fwHeader.slice(0x18, 0x1c));
+
+        if (!fwCrcOk) {
+          tableEl.querySelector(".fix.crc-fix-fw").classList.remove("hidden");
+        }
+        if (!headerCrcOk) {
+          tableEl.querySelector(".fix.crc-fix-header").classList.remove("hidden");
+        }
+      };
+
+      fwInEl.onchange = async (e) => {
+        tableEl.querySelectorAll(".data").forEach((e) => (e.textContent = ""));
+        tableEl.querySelectorAll(".fix").forEach((e) => e.classList.add("hidden"));
+        exportEl.classList.add("hidden");
+
+        if (e.target.files.length === 0) return;
+
+        const selected = e.target.files[0];
+
+        /** @type ArrayBuffer */
+        const bytes = await selected.arrayBuffer();
+
+        filename = selected.name;
+        fwHeader = new Uint8Array(bytes.slice(0, 0x1c));
+        fwBody = new Uint8Array(bytes.slice(0x1c));
+
+        if (fwHeader[0] !== 0x18) {
+          alert("Invalid or old firmware (file should start with 0x18)");
+          return;
+        }
+
+        refreshTable();
+      };
+
+      const calcHeaderCrc = () => {
+        const headerCrcData = fwHeader.slice(0x00, 0x18);
+        headerCrcData[0x01] = 0;
+        headerCrcData[0x02] = 0;
+        headerCrcData[0x03] = 0;
+        return u32ToBytes(crc32(headerCrcData)).reverse();
+      };
+
+      const calcFwCrc = () => {
+        return u32ToBytes(crc32(fwBody)).reverse();
+      };
+
+      const fixCrc = () => {
+        const fwCrc = calcFwCrc();
+
+        for (let i = 0; i < 4; i++) {
+          fwHeader[0x08 + i] = fwCrc[i];
+        }
+
+        const headerCrc = calcHeaderCrc();
+
+        for (let i = 0; i < 4; i++) {
+          fwHeader[0x18 + i] = headerCrc[i];
+        }
+
+        refreshTable();
+      };
+      document.querySelectorAll(".fix.crc-fix").forEach((e) => (e.onclick = fixCrc));
+
+      document.querySelector(".fix.ver-edit").onclick = () => {
+        let verNumber = (fwHeader[0x15] << 8) + fwHeader[0x14];
+        const newVer = prompt("New version", `${(verNumber / 100).toFixed(2)}`);
+
+        if (!/^\d+\.\d+$/.test(newVer)) {
+          alert("Invalid version format (x.x expected)");
+          return;
+        }
+
+        verNumber = Math.round(Number.parseFloat(newVer) * 100);
+        fwHeader[0x14] = verNumber & 0xff;
+        fwHeader[0x15] = Math.floor((verNumber >> 8) & 0xff);
+
+        refreshTable();
+      };
+
+      exportEl.onclick = () => {
+        const blob = new Blob([fwHeader, fwBody], { type: "application/octet-stream" });
+        const downloadUrl = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = downloadUrl;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        URL.revokeObjectURL(downloadUrl);
+      };
+    </script>
+  </body>
+</html>

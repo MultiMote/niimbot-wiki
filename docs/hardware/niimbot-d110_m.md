@@ -29,3 +29,10 @@
 ![pcb_top](files/d110_m/d110_m_pcb_top.jpg)
 
 Photo taken by Zsolt.
+
+## Downgrading firmware
+
+D110_M is known for refusing to accept firmware versions lower than the current one.
+
+To bypass this restriction, you can use the [header editor](../firmware/header-editor.html) and edit the version of the desired firmware to be larger than the current one.
+Don't forget to fix CRC after editing.
