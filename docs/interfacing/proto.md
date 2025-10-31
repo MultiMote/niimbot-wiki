@@ -262,29 +262,6 @@ Example:
        └─ PrintEmptyRow command
 ```
 
-### PrintBitmapRowIndexed
-
-Used when black pixel count is less than 7. Data is encoded with pixel indexes (unsigned 16-bit integers).
-
-Information about `Black pixel count` segment can be found in {@link API.Utils.countPixelsForBitmapPacket} function docs.
-
-Usually printer prints without problems when all of 3 bytes are zeros.
-
-Example:
-
-```
-55 55 83 0a 00 03 02 00 00 02 00 0a 01 40 XX aa aa
-       │  │  └──┤  └──┴──┤  │  └──┤  └──┤  │
-       │  │     │        │  │     │     │  └─ Checksum
-       │  │     │        │  │     │     └─ Draw pixel at x=320
-       │  │     │        │  │     └─ Draw pixel at x=10
-       │  │     │        │  └─ Repeat count (repeat row two times)
-       │  │     │        └─ Black pixel count (see above)
-       │  │     └─ Row number is 3
-       │  └─ Data length
-       └─ PrintBitmapRowIndexed command
-```
-
 ### PrintBitmapRow
 
 Used to send full row segment that includes both black and white pixels.
@@ -307,6 +284,47 @@ Packet example:
        │  └─ Data length
        └─ PrintBitmapRow command
 
+```
+
+#### Black pixel count segment
+
+Info from niimbluelib docs:
+
+Count `non-zero` bits in the pixel data array.
+
+For `split` mode:
+
+Data splitted to the three chunks (last chunk sizes can be lesser, base chunk size is `printhead size / 8 / 3`) and `non-zero` bit count calculated from each chunk.
+
+If data size is more than `printheadPixels / 8`, only `total` mode can be used.
+
+For `total` mode:
+
+Return total number of pixel in little-endian format: `[0, LL, HH]`
+
+For `auto` mode:
+
+By default `split` mode used. If it is not available, `total` mode used.
+
+Usually printer prints without problems when all of 3 bytes are zeros.
+
+### PrintBitmapRowIndexed
+
+Used when black pixel count is less than 7. Data is encoded with pixel indexes (unsigned 16-bit integers).
+
+Example:
+
+```
+55 55 83 0a 00 03 02 00 00 02 00 0a 01 40 XX aa aa
+       │  │  └──┤  └──┴──┤  │  └──┤  └──┤  │
+       │  │     │        │  │     │     │  └─ Checksum
+       │  │     │        │  │     │     └─ Draw pixel at x=320
+       │  │     │        │  │     └─ Draw pixel at x=10
+       │  │     │        │  └─ Repeat count (repeat row two times)
+       │  │     │        └─ Black pixel count (see above)
+       │  │     └─ Row number is 3
+       │  └─ Data length
+       └─ PrintBitmapRowIndexed command
 ```
 
 ## Other packets example
