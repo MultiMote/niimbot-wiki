@@ -6,7 +6,7 @@ Official firmware files is not publicly available.
 
 The NIIMBOT app sends the printer model and version to the API server. If an update is available, the server can provide a URL for downloading the firmware.
 
-This way the bunch of official firmware files was collected here: https://dev.mmote.ru/niimbot-fw/
+This way the bunch of official firmware files was collected here: https://fw.niim.blue/
 
 ## Structure of update file
 

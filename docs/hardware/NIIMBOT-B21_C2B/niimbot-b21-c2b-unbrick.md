@@ -31,7 +31,7 @@ firmware consists of several parts:
 The main part is simple. It is updated by the official app over
 Bluetooth or USB.
 Firmware files are not published openly, but through the API I collected
-all available versions [here](https://dev.mmote.ru/niimbot-fw/).
+all available versions [here](https://fw.niim.blue/).
 
 The firmware doesn't load from address zero because there is a
 bootloader.
@@ -169,8 +169,8 @@ Reconnect to the microcontroller. Select `Download to device` mode.
     [B21-C2B_40.19.bin](../files/b21_c2b/unbrick/B21-C2B_40.19.bin).
 
 This applies only to hardware version `40.x`. Other versions need their
-own firmware ([stable](https://dev.mmote.ru/niimbot-fw/stable/B21-C2B/)
-/ [testing](https://dev.mmote.ru/niimbot-fw/testing/B21-C2B/)).
+own firmware ([stable](https://fw.niim.blue/stable/B21-C2B/)
+/ [testing](https://fw.niim.blue/testing/B21-C2B/)).
 The major firmware version must match the hardware version (e.g.,
 hardware `12.01` requires firmware `12.x`).
 
