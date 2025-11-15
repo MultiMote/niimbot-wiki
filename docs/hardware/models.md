@@ -16,7 +16,8 @@ This is simplified and human-readable variant of [this data](https://print.niimb
 | B16       | 1792               | 203     | 12mm (96px)      | left              | 1,5                                            | 1-[2]-3         | thermal              |
 | B18       | 3584               | 203     | 12mm (96px)      | left              | 1,5,10,11,3                                    | 1-[2]-3         | thermal transfer     |
 | B18S      | 3585               | 203     | 12mm (96px)      | left              | 1,5,10,11,3                                    | 1-[2]-3         | thermal transfer     |
-| B2        | 6912               | 203     | 54mm (432px)     | top               | 1,2,5                                          | 1-[3]-5         | thermal              |
+| B1_PRO    | 4097               | **300** | 48mm (567px)     | top               | 1,2,5                                          | 1-[3]-5         | thermal              |
+| B2        | 6913               | 203     | 54mm (432px)     | top               | 1,2,5                                          | 1-[3]-5         | thermal              |
 | B203      | 2816               | 203     | 50mm (400px)     | top               | 1,2,5                                          | 1-[3]-5         | thermal              |
 | B21       | 768                | 203     | 48mm (384px)     | top               | 1,2,3,5                                        | 1-[3]-5         | thermal              |
 | B21S      | 777                | 203     | 48mm (384px)     | top               | 1,2,3,5                                        | 1-[3]-5         | thermal              |
@@ -24,6 +25,7 @@ This is simplified and human-readable variant of [this data](https://print.niimb
 | B21_C2B   | 771, 775           | 203     | 48mm (384px)     | top               | 1,3,5,2                                        | 1-[3]-5         | thermal              |
 | B21_L2B   | 769                | 203     | 48mm (384px)     | top               | 1,2,5                                          | 1-[3]-5         | thermal              |
 | B21_PRO   | 785                | **300** | 50mm (591px)     | top               | 1,2,3,5                                        | 1-[3]-5         | thermal              |
+| B2_PRO    | 6912               | **300** | 48mm (567px)     | top               | 1,2,5                                          | 1-[3]-5         | thermal              |
 | B3        | 52993              | 203     | 75mm (600px)     | top               | 1,2,3,5                                        | 1-[3]-5         | thermal              |
 | B31       | 5632               | 203     | 75mm (600px)     | top               | 1,2,5                                          | 1-[3]-5         | thermal              |
 | B32       | 2049               | **300** | 72mm (851px)     | top               | 1,5                                            | 1-[10]-15       | thermal transfer     |
@@ -46,6 +48,7 @@ This is simplified and human-readable variant of [this data](https://print.niimb
 | D61       |                    | 203     | 12mm (96px)      | left              | 1,5                                            | 1-[2]-3         | thermal              |
 | DXX       |                    | 203     | 12mm (96px)      | left              | 1,5                                            | 1-[2]-3         | thermal              |
 | EP2M_H    | 4610               | **300** | 48mm (567px)     | top               | 1,5,2,10                                       | 1-[3]-5         | thermal transfer     |
+| EP3M      | 6402               | **300** | 72mm (851px)     | top               | 1,5,2,10                                       | 1-[3]-5         | thermal transfer     |
 | ET10      | 5376               | 203     | 200mm (1600px)   | top               | 3                                              | 3-[3]-3         | electronic price tag |
 | FUST      | 513                | 203     | 12mm (96px)      | left              | 1,5                                            | 1-[3]-5         | thermal              |
 | H1        | 3840               | 203     | 12mm (96px)      | left              | 1,5                                            | 1-[2]-3         | thermal              |
