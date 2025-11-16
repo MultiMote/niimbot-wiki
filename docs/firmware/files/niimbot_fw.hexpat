@@ -27,4 +27,4 @@ u32 header_crc = std::hash::crc32(crc_buf, 0xFFFFFFFF, 0x4c11db7, 0xFFFFFFFF, tr
 std::print("HEADER CRC {0} (calc={1:X} found={2:X})", update.header.header_crc == header_crc ? "OK" : "ERR", update.header.header_crc, header_crc);
 
 u32 fw_crc = std::hash::crc32(update.fw_data, 0xFFFFFFFF, 0x4c11db7, 0xFFFFFFFF, true, true);
-std::print("FW CRC {0} (calc={1:X} found={2:X})", update.header.fw_crc == fw_crc ? "OK" : "ERR", update.header.fw_crc, update.header.header_crc, header_crc);
+std::print("FW CRC {0} (calc={1:X} found={2:X})", update.header.fw_crc == fw_crc ? "OK" : "ERR", update.header.fw_crc, fw_crc);

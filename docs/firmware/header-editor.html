@@ -168,6 +168,10 @@
         return [(n >> 24) & 0xff, (n >> 16) & 0xff, (n >> 8) & 0xff, n & 0xff];
       };
 
+      const bytesToI32 = (arr) => {
+        return new DataView(arr.buffer).getInt32(0, true);
+      }
+
       const u8ArraysEqual = (a, b) => {
         return a.length === b.length && a.every((el, i) => el === b[i]);
       };
@@ -203,9 +207,11 @@
 
         const verNumber = (fwHeader[0x15] << 8) + fwHeader[0x14];
 
+        const fwlen = bytesToI32(fwHeader.slice(0x04, 0x08));
+
         tableEl.querySelector(".data.sign").textContent = bufToHex(fwHeader.slice(0x00, 0x01));
         tableEl.querySelector(".data.rand").textContent = bufToHex(fwHeader.slice(0x01, 0x04));
-        tableEl.querySelector(".data.data-len").textContent = bufToHex(fwHeader.slice(0x04, 0x08));
+        tableEl.querySelector(".data.data-len").textContent = `${fwlen}`;
         tableEl.querySelector(".data.fw-crc").textContent = bufToHex(fwHeader.slice(0x08, 0x0c));
         tableEl.querySelector(".data.unk1").textContent = bufToHex(fwHeader.slice(0x0c, 0x10));
         tableEl.querySelector(".data.unk2").textContent = bufToHex(fwHeader.slice(0x10, 0x14));
@@ -213,7 +219,7 @@
         tableEl.querySelector(".data.unk3").textContent = bufToHex(fwHeader.slice(0x16, 0x18));
         tableEl.querySelector(".data.crc-header").textContent = bufToHex(fwHeader.slice(0x18, 0x1c));
         tableEl.querySelector(".data.fw-bytes").textContent = bufToHex(fwBody.slice(0x00, 0x04)) + " ...";
-        tableEl.querySelector(".data.fw-len-int").textContent = `${fwBody.length}`;
+        tableEl.querySelector(".data.fw-len-int").textContent = `${fwlen}`;
 
         const fwCrc = calcFwCrc();
         const headerCrc = calcHeaderCrc();
@@ -222,6 +228,7 @@
         const headerCrcOk = u8ArraysEqual(headerCrc, fwHeader.slice(0x18, 0x1c));
 
         if (!fwCrcOk) {
+          console.warn(`Expected FW CRC: ${bufToHex(fwCrc)}`);
           tableEl.querySelector(".fix.crc-fix-fw").classList.remove("hidden");
         }
         if (!headerCrcOk) {
@@ -262,7 +269,8 @@
       };
 
       const calcFwCrc = () => {
-        return u32ToBytes(crc32(fwBody)).reverse();
+        const fwlen = bytesToI32(fwHeader.slice(0x04, 0x08));
+        return u32ToBytes(crc32(fwBody.slice(0, fwlen))).reverse();
       };
 
       const fixCrc = () => {
