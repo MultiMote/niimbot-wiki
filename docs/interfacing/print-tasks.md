@@ -170,4 +170,5 @@ pageColor is 0
     Originally `PrintStatus` is sent and no response waited.
 
     Also printer drops the first packet after `PrintStart`.
-    Originally `Heartbeat` is sent and response waited.
+    Originally `Heartbeat` is sent and no response waited.
+
