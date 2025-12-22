@@ -169,6 +169,7 @@ pageColor is 0
     For some reason this printer drops the first packet after `PrintStart` if using Bluetooth connection.
     Originally `PrintStatus` is sent and no response waited.
 
-    Also printer drops the first packet after `PrintStart`.
+    Also printer drops the first packet after `PrintEnd`.
     Originally `Heartbeat` is sent and no response waited.
+
 
