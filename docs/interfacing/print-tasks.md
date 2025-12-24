@@ -4,7 +4,6 @@ Unfortunately, print sequence is not same across different printer models.
 In order to support a wide model range, print tasks have been implemented.
 
 The name of the print task does not necessarily represent the only model it will work with.
-`PrintEnd` should be sent after the print is finished (progress polling is used).
 
 ## D11_V1
 
@@ -171,5 +170,6 @@ pageColor is 0
 
     Also printer drops the first packet after `PrintEnd`.
     Originally `Heartbeat` is sent and no response waited.
+
 
 
