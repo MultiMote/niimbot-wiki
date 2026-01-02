@@ -88,6 +88,15 @@ ws.close()
 
 ![jcprinter](files/flashing/jcprinter.png)
 
+## Downgrading firmware
+
+Some new printers ([D110_M](../hardware/niimbot-d110_m.md), for example) may refuse to flash when the new firmware version is equal to or lower than the current one
+(an error occurs after the first firmware chunk is sent).
+
+To bypass this restriction, you can use the [header editor](../firmware/header-editor.html) and edit the version of the desired firmware to be larger than the current one.
+Don't forget to fix CRC after editing.
+
+
 [^1]: [NiimBlue Wiki: Flashing firmwares](https://github.com/MultiMote/niimblue/wiki/Flashing-firmwares)
 
 [^2]: [B21: Hack to not waste labels during testing, comment by CryoZ](https://github.com/AndBondStyle/niimprint/issues/34#issuecomment-2558283591)
