@@ -37,3 +37,16 @@ Stop motor.
 ## test get sensor
 
 Some system sensors data.
+
+## Other test commands (not all may be supported)
+
+* test get id
+* test set id `<id>` - set device name/serial
+* test print
+* test flash
+* test rfid1
+* test rfid2
+* test unlock chip
+* test get chip lock
+* test rfidMode
+* test exit

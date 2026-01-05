@@ -202,6 +202,14 @@ number issues.
 
 So [NiimBlue](https://niim.blue) is an option.
 
+## Restoring device name/serial
+
+Connect to device serial interface (BAUD 115200) and send test command. ID string format is unknown so experiment with it.
+
+`test set id <id>`
+
+Example: `test set id B21_C2B-AAAAAAAAAA`
+
 ## Miscellaneous
 
 Copies of files from the Artery site:
