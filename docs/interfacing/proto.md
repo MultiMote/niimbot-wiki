@@ -59,7 +59,7 @@
 | 0xaf | PrinterConfig                    | 0xbf |❌|❌|
 | 0xc1 | Connect                          | 0xc2 |✅|❌|
 | 0xda | CancelPrint                      | 0xd0 |✅|✅|
-| 0xdc | Heartbeat                        | 0xde, 0xdf, 0xdd, 0xd9 |❌|❌|
+| 0xdc | [Heartbeat](#heartbeat)          | 0xde, 0xdf, 0xdd, 0xd9 |❌|❌|
 | 0xe3 | PageEnd                          | 0xe4 |✅|✅|
 | 0xf3 | PrintEnd                         | 0xf4 |✅|✅|
 | 0xf5 | StartFirmwareUpgrade             | 0xf6 |❌|✅|
@@ -325,6 +325,68 @@ Example:
        │  │     └─ Row number is 3
        │  └─ Data length
        └─ PrintBitmapRowIndexed command
+```
+
+### Heartbeat
+
+#### Advanced 1
+
+```
+55 55 dc 01 01 dc aa aa
+```
+
+#### Advanced 2
+
+Used on `protocolVersion >= 3` printers
+
+```
+55 55 dc 01 04 d9 aa aa
+```
+
+#### Advanced 1 response
+
+10 bytes
+
+```
+55 55 dd 0a 10 25 00 65 00 65 32 51 01 04 XX aa aa
+             └        skip        ┘  │  │
+                                     │  │
+                                     │  │
+                                     │  └─ Charge Level
+                                     └─ Lid Closed (0 - closed)
+```
+
+13 bytes
+
+```
+55 55 dd 0d 1f b2 00 5d 00 5d 00 00 48 00 04 00 01 XX aa aa
+             └         skip          ┘  │  │  │  │
+                                        │  │  │  └─ Paper RFID Success (1 - RFID ok)
+                                        │  │  └─ Paper Inserted (0 - inserted)
+                                        │  └─ Charge Level
+                                        └─ Lid Closed (0 - closed)
+```
+
+For `512, 514, 513, 2304, 1792, 3584, 5120, 2560, 3840, 4352, 272, 273, 274` [models](../hardware/models.md) `lidClosed` is not inverted (1 - closed).
+
+#### Advanced 2 response
+
+Minimum data length - 9
+
+```
+                                        ┌ Other bytes starting from this byte are optional (inclusive)
+                                        │
+55 55 d9 XX 2e c3 64 4d 00 00 01 01 00 00 00 00 00 00 XX aa aa
+                   │     │  │  │  │  │  └──┤     │  │
+                   │     │  │  │  │  │     │     │  └─ VoltageState
+                   │     │  │  │  │  │     │     └─ LightingErrorCode
+                   │     │  │  │  │  │     └─ Wifi RSSI
+                   │     │  │  │  │  └─ Ribbon inserted
+                   │     │  │  │  └─ Ribbon RFID Success (1 - RFID ok)
+                   │     │  │  └─ Paper RFID Success (0 - RFID ok)
+                   │     │  └─ Paper Inserted (0 - inserted)
+                   │     └─ Lid Closed (0 - closed)
+                   └─ Charge Level
 ```
 
 ## Other packets example
