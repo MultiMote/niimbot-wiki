@@ -17,7 +17,7 @@ This is simplified and human-readable variant of [this data](https://print.niimb
 | B18       | 3584               | 203     | 12mm (96px)      | left              | 1,5,10,11,3                                    | 1-[2]-3         | thermal transfer     |
 | B18S      | 3585               | 203     | 12mm (96px)      | left              | 1,5,10,11,3                                    | 1-[2]-3         | thermal transfer     |
 | B1_PRO    | 4097               | **300** | 48mm (567px)     | top               | 1,2,5                                          | 1-[3]-5         | thermal              |
-| B2        | 6913               | 203     | 54mm (432px)     | top               | 1,2,5                                          | 1-[3]-5         | thermal              |
+| B2        | 6913               | 203     | 48mm (384px)     | top               | 1,2,5                                          | 1-[3]-5         | thermal              |
 | B203      | 2816               | 203     | 50mm (400px)     | top               | 1,2,5                                          | 1-[3]-5         | thermal              |
 | B21       | 768                | 203     | 48mm (384px)     | top               | 1,2,3,5                                        | 1-[3]-5         | thermal              |
 | B21S      | 777                | 203     | 48mm (384px)     | top               | 1,2,3,5                                        | 1-[3]-5         | thermal              |
