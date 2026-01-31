@@ -35,10 +35,11 @@
 
 You can carefully detach RFID tag from the roll and attach it to the printer case as shown below:
 
-![alt text](files/b1/b1_rfid_case.jpg)
+![b1_rfid_case](files/b1/b1_rfid_case.jpg)
 
 This can be used for testing purposes as it allows to print on any label paper.
 
 Notes:
-* counter will be still incremented
-* first calibration (after power up and lid close) will use RFID paper height so If you are using different paper height, first print may be misaligned
+
+* Counter will be still incremented.
+* First calibration (after power up and lid close) will use RFID paper height so If you are using different paper height, first print may be misaligned.
