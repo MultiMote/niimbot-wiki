@@ -99,7 +99,7 @@ PrintEnd [1(u8)]
 
 ## B1
 
-Used in most printers released recently (2024).
+Used in most printers released in 2024
 
 Print progress is fetched by continuously sending `PrintStatus`.
 
@@ -131,6 +131,8 @@ pageColor is 0
 
 
 ## D110M_V4
+
+Used in most printers released in 2025
 
 Print progress is fetched by continuously sending `PrintStatus`. PageStart command is not used.
 
