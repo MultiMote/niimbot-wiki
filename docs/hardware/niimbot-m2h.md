@@ -19,8 +19,11 @@
 
 ## HW
 
-| Parameter             | Value        |
-| --------------------- | ------------ |
-| MCU                   | Artery maybe |
-| Firmware base address | 0x8002000    |
-| Firmware file offset  | 0x1C         |
+| Parameter             | Value          |
+| --------------------- | -------------- |
+| MCU                   | GigaDevice ARM |
+| Firmware base address | 0x8002000      |
+| Firmware file offset  | 0x1C           |
+
+
+Internal Photos: https://fcc.report/FCC-ID/2ARXB-M2H/6949222
