@@ -19,11 +19,11 @@
 
 ## HW
 
-| Parameter             | Value          |
-| --------------------- | -------------- |
-| MCU                   | GigaDevice ARM |
-| Firmware base address | 0x8002000      |
-| Firmware file offset  | 0x1C           |
+| Parameter             | Value                                                                                                           |
+| --------------------- | --------------------------------------------------------------------------------------------------------------- |
+| MCU                   | [GigaDevice GD32EPRTRDT6](https://www.gigadevice.com/product/mcu/mcus-product-selector/gd32eprtrdt6) (not sure) |
+| Firmware base address | 0x8002000                                                                                                       |
+| Firmware file offset  | 0x1C                                                                                                            |
 
 
 Internal Photos: https://fcc.report/FCC-ID/2ARXB-M2H/6949222
