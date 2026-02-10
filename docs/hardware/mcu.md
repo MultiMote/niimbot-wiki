@@ -23,3 +23,9 @@ Memory map:
 Memory map:
 
 ![AT32F403A_mem_map](files/AT32F403A_mem_map.png)
+
+## Artery AT32F490
+
+Memory map:
+
+![AT32F490_mem_map](files/AT32F490_mem_map.png)
