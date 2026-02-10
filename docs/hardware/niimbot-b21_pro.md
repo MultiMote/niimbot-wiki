@@ -8,15 +8,15 @@ Uses two optical sensors for paper positioning.
 
 <!-- BEGIN B21_PRO CLOUD_INFO -->
 <!-- Auto-generated, do not edit -->
-| Parameter                                    | Value        |
-|----------------------------------------------|--------------|
-| ID                                           | 785          |
-| DPI                                          | **300**      |
-| Printhead size                               | 50mm (591px) |
-| Print direction                              | top          |
-| [Paper types](../interfacing/paper-types.md) | 1,2,3,5      |
-| Density range                                | 1-[3]-5      |
-| Printer type                                 | thermal      |
+| Parameter                              | Value        |
+|----------------------------------------|--------------|
+| ID                                     | 785          |
+| DPI                                    | **300**      |
+| Printhead size                         | 50mm (591px) |
+| Print direction                        | top          |
+| [Paper types](../other/label-types.md) | 1,2,3,5      |
+| Density range                          | 1-[3]-5      |
+| Printer type                           | thermal      |
 <!-- END CLOUD_INFO -->
 
 ## HW 3.01

@@ -88,7 +88,7 @@ for dir_name, _, files in os.walk(root):
                         f"{info['head_mm']}mm ({info['head_px']}px)",
                     ],
                     ["Print direction", info["dir"]],
-                    [f"[Paper types]({root_rel}/interfacing/paper-types.md)", info["papers"]],
+                    [f"[Paper types]({root_rel}/other/label-types.md)", info["papers"]],
                     ["Density range", info["density"]],
                     ["Printer type", info["type"]],
                 ]
@@ -107,7 +107,7 @@ for dir_name, _, files in os.walk(root):
                 "DPI",
                 "Printhead size",
                 "Print direction",
-                f"[Paper types]({root_rel}/interfacing/paper-types.md)",
+                f"[Paper types]({root_rel}/other/label-types.md)",
                 "Density range",
                 "Printer type",
             ]

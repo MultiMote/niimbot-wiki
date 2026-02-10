@@ -6,15 +6,15 @@
 
 <!-- BEGIN D110_M CLOUD_INFO -->
 <!-- Auto-generated, do not edit -->
-| Parameter                                    | Value       |
-|----------------------------------------------|-------------|
-| ID                                           | 2320        |
-| DPI                                          | 203         |
-| Printhead size                               | 12mm (96px) |
-| Print direction                              | left        |
-| [Paper types](../interfacing/paper-types.md) | 1,5         |
-| Density range                                | 1-[3]-5     |
-| Printer type                                 | thermal     |
+| Parameter                              | Value       |
+|----------------------------------------|-------------|
+| ID                                     | 2320        |
+| DPI                                    | 203         |
+| Printhead size                         | 12mm (96px) |
+| Print direction                        | left        |
+| [Paper types](../other/label-types.md) | 1,5         |
+| Density range                          | 1-[3]-5     |
+| Printer type                           | thermal     |
 <!-- END CLOUD_INFO -->
 
 ## HW
