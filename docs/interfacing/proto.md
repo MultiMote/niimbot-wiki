@@ -162,7 +162,7 @@ Can have different format depending on the model.
        │  │  └──┤  └──┴──┴──┘  │  │  │  │
        │  │     │   Always 0   │  │  │  └─ Checksum
        │  │     │              │  │  └─ Some flag (unknown use)
-       │  │     │              │  └─ Quality (unknown use)
+       │  │     │              │  └─ Speed (0 - higher quality and slower speed, 1 - lower quality and faster speed)
        │  │     │              └─ Page color (unknown use)
        │  │     └─ Total pages (sum of page quantity of each page)
        │  └─ Data length
