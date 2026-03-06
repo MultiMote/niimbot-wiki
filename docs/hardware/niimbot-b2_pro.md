@@ -1,6 +1,6 @@
 # NIIMBOT B2 Pro
 
-![b1](files/b2/b2.jpg)
+![b2](files/b2/B2.jpg)
 
 # Properties
 
