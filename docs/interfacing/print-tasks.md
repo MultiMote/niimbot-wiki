@@ -88,12 +88,12 @@ SetPageSize [rows(u16), cols(u16)]
 PrintQuantity [quantity(u16)]
 PrintEmptyRow | PrintBitmapRow | PrintBitmapRowIndexed
 PageEnd [1(u8)]
+(status poll)
 ```
 
 End:
 
 ```
-(status poll)
 PrintEnd [1(u8)]
 ```
 
