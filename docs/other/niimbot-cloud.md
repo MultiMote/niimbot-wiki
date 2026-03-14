@@ -79,6 +79,7 @@ Content-Type: application/json
 niimbot-user-agent: AppVersionName/999.0.0
 
 {
+  "languageCode": "en",
   "width": 50,
   "height": 30,
   "limit": 10,
@@ -96,6 +97,7 @@ Content-Type: application/json
 niimbot-user-agent: AppVersionName/999.0.0
 
 {
+  "languageCode": "en",
   "width": 50,
   "height": 30,
   "limit": 256,
