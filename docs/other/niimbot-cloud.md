@@ -59,3 +59,57 @@ or
 ```http
 GET https://oss-print.niimbot.com/public_resources/static_resources/devices.json HTTP/1.1
 ```
+
+# industryTemplate/sizes
+
+Gat all available template sizes
+
+```http
+GET https://print.niimbot.com/api/industryTemplate/sizes HTTP/1.1
+niimbot-user-agent: AppVersionName/999.0.0
+```
+
+# industryTemplate/categories
+
+Get template categories
+
+```http
+POST https://print.niimbot.com/api/industryTemplate/categories HTTP/1.1
+Content-Type: application/json
+niimbot-user-agent: AppVersionName/999.0.0
+
+{
+  "width": 50,
+  "height": 30,
+  "limit": 10,
+  "page": 1
+}
+```
+
+# industryTemplate/page
+
+Get templates by size
+
+```http
+POST https://print.niimbot.com/api/industryTemplate/page HTTP/1.1
+Content-Type: application/json
+niimbot-user-agent: AppVersionName/999.0.0
+
+{
+  "width": 50,
+  "height": 30,
+  "limit": 256,
+  "page": 1
+}
+```
+
+
+
+# Other
+
+```http
+POST https://print.niimbot.com/api/industry/listIndustryCategoryMachineAdaptInfo HTTP/1.1
+Content-Type: application/json
+niimbot-user-agent: AppVersionName/999.0.0
+```
+
