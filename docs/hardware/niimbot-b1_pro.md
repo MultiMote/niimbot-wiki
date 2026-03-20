@@ -21,7 +21,12 @@
 
 | Parameter             | Value                            |
 |-----------------------|----------------------------------|
-| MCU                   | ?                                |
+| MCU                   | SiFli SF32BPRTU36                |
 | Firmware base address | ⚠ Firmware seems to be encrypted |
-| Firmware file offset  | 0                                |
+| Firmware file offset  | ?                                |
+
+
+![pcb_2](files/b1_pro/B1_Pro_pcb_2.jpeg)
+
+![pcb_1](files/b1_pro/B1_Pro_pcb_1.jpeg)
 
