@@ -26,3 +26,7 @@
 | Firmware file offset  | 0x1C                                          |
 
 
+## Downgrading firmware
+
+D11_H is known for refusing to accept firmware versions lower than the current one.
+See [flashing firmware](../firmware/flashing-firmware.md#downgrading-firmware).
