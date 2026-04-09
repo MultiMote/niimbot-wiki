@@ -1,6 +1,6 @@
 # NIIMBOT M2_H
 
-![d11_h](files/m2_h/m2_h.jpg)
+![m2_h](files/m2_h/m2_h.jpg)
 
 # Properties
 
