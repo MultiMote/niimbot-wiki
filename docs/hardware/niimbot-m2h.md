@@ -27,3 +27,8 @@
 
 
 Internal Photos: https://fcc.report/FCC-ID/2ARXB-M2H/6949222
+
+## Downgrading firmware
+
+M2_H is known for refusing to accept firmware versions lower than the current one.
+See [flashing firmware](../firmware/flashing-firmware.md#downgrading-firmware).
