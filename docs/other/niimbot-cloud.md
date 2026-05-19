@@ -100,7 +100,7 @@ niimbot-user-agent: AppVersionName/999.0.0
   "languageCode": "en",
   "width": 50,
   "height": 30,
-  "limit": 256,
+  "limit": 10,
   "page": 1
 }
 ```

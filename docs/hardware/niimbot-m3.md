@@ -22,7 +22,7 @@
 | Parameter             | Value  |
 | --------------------- | ------ |
 | MCU                   | ? |
-| Firmware base address | ? |
+| Firmware base address | 0x8002000 |
 | Firmware file offset  | 0x1C |
 
 ## Refilling ribbon cartridge
