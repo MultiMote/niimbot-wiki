@@ -19,9 +19,16 @@
 
 ## HW
 
-| Parameter             | Value                |
-|-----------------------|----------------------|
-| MCU                   | AT32/GD32 (not sure) |
-| Firmware base address | 0x8002000            |
-| Firmware file offset  | 0x1C                 |
+| Parameter             | Value                                                                     |
+| --------------------- | ------------------------------------------------------------------------- |
+| MCU                   | [Artery AT32F490RCT7](https://www.arterychip.com/en/product/AT32F490.jsp) |
+| Firmware base address | 0x8002000                                                                 |
+| Firmware file offset  | 0x1C                                                                      |
 
+![b2int1](files/b2/b2int1.jpg)
+
+![b2int2](files/b2/b2int2.jpg)
+
+![b2int3](files/b2/b2int3.jpg)
+
+Photos are taken by Bankersman.
