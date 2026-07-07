@@ -6,6 +6,7 @@ This is simplified and human-readable variant of [this data](https://print.niimb
 <!-- Auto-generated, do not edit -->
 | Name      | ID                 | DPI     | Printhead size   | Print direction   | [Paper types](../other/label-types.md)   | Density range   | Printer type         |
 |-----------|--------------------|---------|------------------|-------------------|------------------------------------------|-----------------|----------------------|
+| A1_PRO    | 7424               | **300** | 25mm (296px)     | left              | 4,3                                      | 1-[3]-5         | thermal transfer     |
 | A20       | 2817               | 203     | 50mm (400px)     | top               | 1,2,5                                    | 1-[3]-5         | thermal              |
 | A203      | 2818               | 203     | 50mm (400px)     | top               | 1,2,5                                    | 1-[3]-5         | thermal              |
 | A63       | 2054               | **300** | 72mm (851px)     | top               | 1,5,2                                    | 1-[10]-15       | thermal transfer     |
@@ -34,6 +35,7 @@ This is simplified and human-readable variant of [this data](https://print.niimb
 | B3S       | 256, 260, 262      | 203     | 72mm (576px)     | top               | 1,2,3,5                                  | 1-[3]-5         | thermal              |
 | B3S_P     | 272                | 203     | 72mm (576px)     | top               | 1,2,3,5                                  | 1-[3]-5         | thermal              |
 | B4        | 6656               | 203     | 104mm (832px)    | top               | 1,2,5                                    | 1-[3]-5         | thermal              |
+| B4_PRO    | 6657               | **300** | 104mm (1229px)   | top               | 1,2,5                                    | 1-[3]-5         | thermal              |
 | B50       | 51713              | 203     | 50mm (400px)     | top               | 1,2,3,4                                  | 6-[10]-15       | thermal transfer     |
 | B50W      | 51714              | 203     | 48mm (384px)     | top               | 1,2,3,4                                  | 6-[10]-15       | thermal transfer     |
 | BETTY     | 2561               | 203     | 24mm (192px)     | left              | 1,5                                      | 1-[2]-3         | thermal              |
@@ -48,6 +50,7 @@ This is simplified and human-readable variant of [this data](https://print.niimb
 | D41       |                    | 203     | 12mm (96px)      | left              | 1,5                                      | 1-[2]-3         | thermal              |
 | D61       |                    | 203     | 12mm (96px)      | left              | 1,5                                      | 1-[2]-3         | thermal              |
 | DXX       |                    | 203     | 12mm (96px)      | left              | 1,5                                      | 1-[2]-3         | thermal              |
+| EP1C      | 5121               | **300** | 15mm (178px)     | left              | 3                                        | 1-[3]-5         | wire marking         |
 | EP2M_H    | 4610               | **300** | 48mm (567px)     | top               | 1,5,2,10                                 | 1-[3]-5         | thermal transfer     |
 | EP3M      | 6402               | **300** | 72mm (851px)     | top               | 1,5,2,10                                 | 1-[3]-5         | thermal transfer     |
 | ET10      | 5376               | 203     | 200mm (1600px)   | top               | 3                                        | 3-[3]-3         | electronic price tag |
@@ -60,7 +63,9 @@ This is simplified and human-readable variant of [this data](https://print.niimb
 | JC_M90    | 51461              | 203     | 48mm (384px)     | top               | 1,2,3,4                                  | 6-[10]-15       | thermal              |
 | K2        | 6144               | 203     | 56mm (448px)     | top               | 1,2,5                                    | 1-[3]-5         | thermal              |
 | K3        | 4864               | 203     | 80mm (640px)     | top               | 1,2,5                                    | 1-[3]-5         | thermal              |
+| K3_ITD    | 4868               | 203     | 80mm (640px)     | top               | 1,2,5                                    | 1-[3]-5         | thermal              |
 | K3_W      | 4865               | 203     | 80mm (640px)     | top               | 1,2,5                                    | 1-[3]-5         | thermal              |
+| K4        | 7168               | 203     | 104mm (832px)    | top               | 1,2,5                                    | 1-[7]-15        | thermal              |
 | M2_H      | 4608               | **300** | 48mm (567px)     | top               | 1,5,2,10                                 | 1-[3]-5         | thermal transfer     |
 | M3        | 6400               | **300** | 72mm (851px)     | top               | 1,5,2,10                                 | 1-[3]-5         | thermal transfer     |
 | MP3K      | 4866               | 203     | 80mm (640px)     | top               | 1,2,5                                    | 1-[3]-5         | thermal              |
