@@ -50,3 +50,5 @@ Some system sensors data.
 * test get chip lock
 * test rfidMode
 * test exit
+* test get rtc
+* test set rtc

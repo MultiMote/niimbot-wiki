@@ -25,6 +25,12 @@ App fetches label dimensions from the server by label (barcode/serial) number.
 
 NIIMBOT uses thermal synthetic labels. They are waterproof.
 
+### Dual color labels
+
+NIIMBOT offers dual color labels (red/black). Color depends on the heat.
+
+![gap-2color](images/labeltypes/gap-2color.jpg)
+
 ## 2 - Black
 
 not sure
@@ -34,6 +40,10 @@ not sure
 ## 3 - Continuous
 
 ![continuous](images/labeltypes/continuous.jpg)
+
+### Shrink tube / PVC tag
+
+![tube](images/labeltypes/tube.jpg)
 
 ## 5 - Transparent
 

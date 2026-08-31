@@ -105,6 +105,33 @@ niimbot-user-agent: AppVersionName/999.0.0
 }
 ```
 
+# device-series/list
+
+Get printer models with images
+
+```
+GET https://print.niimbot.com/api/content/device-series/list  HTTP/1.1
+```
+
+# en.json
+
+Get language pack
+
+```
+https://oss-print.niimbot.com/public_resources/static_resources/languagePack/en.json HTTP/1.1
+```
+
+# tube/categories
+
+```http
+GET https://print.niimbot.com/api/labels/tube/categories HTTP/1.1
+```
+
+# tube/spec-list
+
+```http
+GET https://print.niimbot.com/api/labels/tube/spec-list?consumableCode=CODE HTTP/1.1
+```
 
 
 # Other
