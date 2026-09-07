@@ -1211,6 +1211,12 @@ Sent by the client every 2000 ms (default interval) after connection.
 55 55 dc 01 01 dc aa aa
 ```
 
+#### Type 2 — PrinterInfo
+
+```
+55 55 dc 01 03 dc aa aa
+```
+
 #### Type 4 — Advanced2 (used when `protocolVersion >= 3`)
 
 ```
@@ -1296,6 +1302,27 @@ Minimum payload length: **9 bytes**.
                    │  │  └─ Lid Closed (0 - closed)
                    │  └─ Temperature
                    └─ Charge Level
+```
+
+### Response — PrinterInfo (`0xde`)
+
+```
+55 55 de 0a VH VL VH VL WH WL AC HA SR SW XX aa aa
+             └──┤  └──┤  └──┤  │  │  │  │
+                │     │     │  │  │  │  └─ Supports write RFID
+                │     │     │  │  │  └─ Supports RFID
+                │     │     │  │  └─ Printhead alignment
+                │     │     │  └─ Print accuracy
+                │     │     └─ Printhead width (u16)
+                │     └─ Software version (u16)
+                └─ Hardware version (u16)
+```
+
+Example:
+
+```
+55 55 DE 0A 05 0A 05 16 01 80 02 02 01 00 48 AA AA - B1
+55 55 DE 0A 03 01 03 09 02 40 03 02 01 00 9E AA AA - B21 Pro
 ```
 
 ## StartFirmwareUpgrade
