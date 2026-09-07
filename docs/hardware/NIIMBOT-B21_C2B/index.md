@@ -10,7 +10,7 @@
 |-------------------------------------------|--------------|
 | ID                                        | 771, 775     |
 | DPI                                       | 203          |
-| Printhead size                            | 48mm (384px) |
+| Printhead size                            | 48mm / 384px |
 | Print direction                           | top          |
 | [Paper types](../../other/label-types.md) | 1,3,5,2      |
 | Density range                             | 1-[3]-5      |

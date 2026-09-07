@@ -11,7 +11,7 @@
 |----------------------------------------|--------------|
 | ID                                     | 2560         |
 | DPI                                    | 203          |
-| Printhead size                         | 24mm (192px) |
+| Printhead size                         | 24mm / 192px |
 | Print direction                        | left         |
 | [Paper types](../other/label-types.md) | 1,5          |
 | Density range                          | 1-[2]-3      |

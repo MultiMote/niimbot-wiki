@@ -10,7 +10,7 @@
 |----------------------------------------|--------------|
 | ID                                     | 5632         |
 | DPI                                    | 203          |
-| Printhead size                         | 75mm (600px) |
+| Printhead size                         | 75mm / 600px |
 | Print direction                        | top          |
 | [Paper types](../other/label-types.md) | 1,2,5        |
 | Density range                          | 1-[3]-5      |

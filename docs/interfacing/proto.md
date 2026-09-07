@@ -1318,6 +1318,13 @@ Minimum payload length: **9 bytes**.
                 └─ Hardware version (u16)
 ```
 
+Print accuracy actually looks like DPI classification:
+
+| Byte | Meaning |
+| :--: | :------ |
+| 0x02 | 203 dpi |
+| 0x03 | 300 dpi |
+
 Example:
 
 ```

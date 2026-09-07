@@ -10,7 +10,7 @@
 |----------------------------------------|------------------|
 | ID                                     | 6400             |
 | DPI                                    | **300**          |
-| Printhead size                         | 72mm (851px)     |
+| Printhead size                         | 72mm / 851px     |
 | Print direction                        | top              |
 | [Paper types](../other/label-types.md) | 1,5,2,10         |
 | Density range                          | 1-[3]-5          |

@@ -10,7 +10,7 @@
 |----------------------------------------|---------------|
 | ID                                     | 6656          |
 | DPI                                    | 203           |
-| Printhead size                         | 104mm (832px) |
+| Printhead size                         | 104mm / 832px |
 | Print direction                        | top           |
 | [Paper types](../other/label-types.md) | 1,2,5         |
 | Density range                          | 1-[3]-5       |

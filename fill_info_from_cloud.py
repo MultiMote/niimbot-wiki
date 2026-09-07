@@ -5,6 +5,36 @@ from tabulate import tabulate
 import math
 from os.path import relpath
 
+ppmm_dict = {
+    "203": 8,
+    "300": 11.81,
+}
+
+dir_dict = {
+    270: "left",
+    180: "top",
+    90: "left",
+    0: "top",
+}
+
+type_dict = {
+    "热转印打印机": "thermal transfer",
+    "热敏打印机": "thermal",
+    "线号机": "wire marking",
+    "电子价签": "electronic price tag",
+    "热敏及热转印打印机": "thermal transfer",
+}
+
+verified_printhead_sizes = {
+    "B1_PRO": 576,
+    "B1": 384,
+    "B2_PRO": 576,
+    "B21_PRO": 576,
+    "D11_H": 144,
+    "D110": 96,
+    "M2_H": 576,
+    "N1": 96,
+}
 
 resp = get("https://print.niimbot.com/api/hardware/list")
 resp.raise_for_status()
@@ -16,40 +46,32 @@ model_list.sort(key=lambda m: m["name"])
 
 
 def transform_model_info(model):
-    ppmm_dict = {
-        "203": 8,
-        "300": 11.81,
-    }
-
-    dir_dict = {
-        270: "left",
-        180: "top",
-        90: "left",
-        0: "top",
-    }
-
-    type_dict = {
-        "热转印打印机": "thermal transfer",
-        "热敏打印机": "thermal",
-        "线号机": "wire marking",
-        "电子价签": "electronic price tag",
-        "热敏及热转印打印机": "thermal transfer"
-    }
-
     out = {}
 
     out["name"] = model["name"]
     out["id"] = ", ".join([str(i) for i in model["codes"]])
     out["head_mm"] = model["widthSetEnd"]
     out["head_px"] = math.ceil(model["widthSetEnd"] * ppmm_dict[model["paccuracyName"]])
+    out["head_px_verified"] = verified_printhead_sizes.get(model["name"], None)
+
+    if out["head_px_verified"]:
+        out["head_size"] = (
+            f"{out['head_mm']}mm / {out['head_px_verified']}px (verified)"
+        )
+    else:
+        out["head_size"] = f"{out['head_mm']}mm / {out['head_px']}px"
+
     out["dpi"] = (
         "**300**" if model["paccuracyName"] == "300" else model["paccuracyName"]
     )
     out["dir"] = dir_dict[model["printDirection"]]
     out["papers"] = model["paperType"]
-    out["density"] = f"{model['solubilitySetStart']}-[{model['solubilitySetDefault']}]-{model['solubilitySetEnd']}"
+    out["density"] = (
+        f"{model['solubilitySetStart']}-[{model['solubilitySetDefault']}]-{model['solubilitySetEnd']}"
+    )
     out["type"] = type_dict[model["modelName"]]
     return out
+
 
 root = "./docs"
 
@@ -78,15 +100,11 @@ for dir_name, _, files in os.walk(root):
 
             if model is not None:
                 info = transform_model_info(model)
-
                 header = ["Parameter", "Value"]
                 data = [
                     ["ID", info["id"]],
                     ["DPI", info["dpi"]],
-                    [
-                        "Printhead size",
-                        f"{info['head_mm']}mm ({info['head_px']}px)",
-                    ],
+                    ["Printhead size", info["head_size"]],
                     ["Print direction", info["dir"]],
                     [f"[Paper types]({root_rel}/other/label-types.md)", info["papers"]],
                     ["Density range", info["density"]],
@@ -116,16 +134,17 @@ for dir_name, _, files in os.walk(root):
 
             for model in model_list:
                 info = transform_model_info(model)
+
                 data.append(
                     [
                         info["name"],
                         info["id"],
                         info["dpi"],
-                        f"{info['head_mm']}mm ({info['head_px']}px)",
+                        info["head_size"],
                         info["dir"],
                         info["papers"],
-                        info['density'],
-                        info['type'],
+                        info["density"],
+                        info["type"],
                     ]
                 )
 
