@@ -7,12 +7,8 @@ it is, so you can pick one and judge it yourself.
 !!! note
 
     Model support varies a lot between projects, and a project that names your model may still
-    behave differently on your unit. The [hardware pages](../hardware/models.md) are the
-    reference for what a given printer actually is.
+    behave differently on your unit.
 
-Metadata below was read from each repository. "License: not declared" means the repository has
-no license file, which means the default is *all rights reserved* regardless of the code being
-public.
 
 ## Applications
 
@@ -22,12 +18,12 @@ public.
 | [catlabel](https://github.com/lukaszliniewicz/catlabel)<br>![Last Commit](https://img.shields.io/github/last-commit/lukaszliniewicz/catlabel)                                    | Web (local)           | Python     | Apache-2.0 | Local design and printing studio with a visual canvas, batch printing from CSV. Also covers Phomemo and generic printers. |
 | [NiimBlue](https://github.com/MultiMote/niimblue) ([niim.blue](https://niim.blue))<br>![Last Commit](https://img.shields.io/github/last-commit/MultiMote/niimblue)               | Browser               | TypeScript | MIT        | Design and print labels from a desktop or mobile browser.                                                                 |
 | [niimbot-printer](https://github.com/ooguz/niimbot-printer)<br>![Last Commit](https://img.shields.io/github/last-commit/ooguz/niimbot-printer)                                   | Desktop               | Python     | GPL-3.0    | Prints labels on the B1, with Pretix integration.                                                                         |
+| [NiimPrintX](https://github.com/labbots/NiimPrintX)<br>![Last Commit](https://img.shields.io/github/last-commit/labbots/NiimPrintX)                                              | Python                | Python     | GPL-3.0    | Bluetooth. Names D11, B21, B1, D110 and B18. Based on niimprint but doesn't mention any credits to the original project.  |
 | [printrow](https://github.com/slastra/printrow) ([printrow.lastra.us](https://printrow.lastra.us))<br>![Last Commit](https://img.shields.io/github/last-commit/slastra/printrow) | Browser               | TypeScript | MIT        | Label designer over Web Bluetooth. Binds `{{vars}}` to CSV columns for batch printing. Covers the B1 and the KNAON Y50P.  |
 | [Thermalith](https://github.com/EvilGeniusLabs-ca/Thermalith)<br>![Last Commit](https://img.shields.io/github/last-commit/EvilGeniusLabs-ca/Thermalith)                          | Windows, macOS, Linux | C#         | GPL-3.0    | Desktop label designer over USB or Bluetooth, with the driver split into a reusable .NET library.                         |
 | [ThermoTask](https://github.com/alefaraci/ThermoTask)<br>![Last Commit](https://img.shields.io/github/last-commit/alefaraci/ThermoTask)                                          | macOS                 | Swift      | Apache-2.0 | Prints Apple Calendar events and Reminders as thermal tickets.                                                            |
 | [TiMini-Print](https://github.com/Dejniel/TiMini-Print)<br>![Last Commit](https://img.shields.io/github/last-commit/Dejniel/TiMini-Print)                                        | Desktop               | Python     | Apache-2.0 | Prints images, PDFs and text to Chinese Bluetooth "cat" thermal mini printers.                                            |
 | [vooki-thermo-printer](https://github.com/vookimedlo/vooki-thermo-printer)<br>![Last Commit](https://img.shields.io/github/last-commit/vookimedlo/vooki-thermo-printer)          | macOS                 | Swift      | GPL-3.0    | Lightweight printing tool.                                                                                                |
-| [NiimPrintX](https://github.com/labbots/NiimPrintX)<br>![Last Commit](https://img.shields.io/github/last-commit/labbots/NiimPrintX)                                              | Python                | Python     | GPL-3.0    | Bluetooth. Names D11, B21, B1, D110 and B18. Based on niimprint but doesn't mention any credits to the original project.  |
 
 ## Libraries and drivers
 
