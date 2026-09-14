@@ -360,8 +360,8 @@ Response (`0x12`): simple.
 
 ```
 55 55 1e 09 01 00 01 00 00 02 f8 01 f4 XX aa aa
-       │  │                               │
-       │  │                               └─ Checksum
+       │  │                             │
+       │  │                             └─ Checksum
        │  └─ Data length = 9
        └─ SetReversePrinterFeed command
 ```
@@ -637,12 +637,11 @@ Request: simple.
 
 If `dataLength == 1`: tag not present.
 
-Otherwise (sequential fields):
-
 ```
-55 55 ID LL U1 U2 U3 U4 U5 U6 U7 U8 BC ... SN ... AP AP UP UP CT [CP CP] XX aa aa
-       │  │  └────────────────────┤  │      │      └──┤  └──┤  │   └──┤  │
-       │  │                       │  │      │         │     │  │      │  └─ Checksum
+55 55 ID LL U1 U2 U3 U4 U5 U6 U7 U8 BC ... SN ... AP AP UP UP CT [CP CP] U1 U2 U3 U4 U5 U6 U7 U8 XX aa aa
+       │  │  └────────────────────┤  │      │      └──┤  └──┤  │   └──┤   └────────────────────┤  │
+       │  │                       │  │      │         │     │  │      │                        │  └─ Checksum
+       │  │                       │  │      │         │     │  │      │                        └─ Secondary tag UUID (optional)
        │  │                       │  │      │         │     │  │      └─ Capacity (u16, optional)
        │  │                       │  │      │         │     │  └─ Consumable type (u8)
        │  │                       │  │      │         │     └─ Used paper (u16)
