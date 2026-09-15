@@ -23,10 +23,12 @@ Client                              Printer
   │── PageStart (0x03) ───────────────►│  payload: [0x01]
   │── SetPageSize (0x13, 2b) ─────────►│  payload: [rows(u16)]
   │── PrintQuantity (0x15) ───────────►│  payload: [quantity(u16)]
-  │── Write Image Data ───────────────►│  PrintEmptyRow (0x84) | PrintBitmapRow (0x85) | PrintBitmapRowIndexed (0x83)
+  │── Write Image Data ───────────────►│  one-way: PrintEmptyRow (0x84) | PrintBitmapRow (0x85) | PrintBitmapRowIndexed (0x83)
   │── PageEnd (0xe3) ─────────────────►│  payload: [0x01]
   │                                    │
+  │  ↻ status polling loop:            │
   │◄─ In_PrinterPageIndex (0xe0) ──────┤  wait until payload(u16) == total pages
+  │                                    │
   │── PrintEnd (0xf3) ────────────────►│  payload: [0x01]
 ```
 
@@ -44,7 +46,7 @@ Client                              Printer
   │  ↻ per page loop:                  │
   │── PageStart (0x03) ───────────────►│  payload: [0x01]
   │── SetPageSize (0x13, 4b) ─────────►│  payload: [rows(u16), cols(u16)]
-  │── Write Image Data ───────────────►│  PrintEmptyRow (0x84) | PrintBitmapRow (0x85) | PrintBitmapRowIndexed (0x83)
+  │── Write Image Data ───────────────►│  one-way: PrintEmptyRow (0x84) | PrintBitmapRow (0x85) | PrintBitmapRowIndexed (0x83)
   │── PrinterCheckLine (0x86) ────────►│  payload: [line(u16), 0x01] (every 200 lines)
   │── PageEnd (0xe3) ─────────────────►│  payload: [0x01]
   │                                    │
@@ -67,7 +69,7 @@ Client                              Printer
   │  ↻ per page loop:                  │
   │── PageStart (0x03) ───────────────►│  poll until true
   │── SetPageSize (0x13, 4b) ─────────►│  payload: [rows(u16), cols(u16)]
-  │── Write Image Data ───────────────►│  PrintEmptyRow (0x84) | PrintBitmapRow (0x85) | PrintBitmapRowIndexed (0x83)
+  │── Write Image Data ───────────────►│  one-way: PrintEmptyRow (0x84) | PrintBitmapRow (0x85) | PrintBitmapRowIndexed (0x83)
   │── PrinterCheckLine (0x86) ────────►│  payload: [line(u16), 0x01] (every 200 lines)
   │                                    │
   │  ↻ status polling loop             │
@@ -96,12 +98,12 @@ Client                              Printer
   │── PageStart (0x03) ───────────────►│  payload: [0x01]
   │── SetPageSize (0x13, 4b) ─────────►│  payload: [rows(u16), cols(u16)]
   │── PrintQuantity (0x15) ───────────►│  payload: [quantity(u16)]
-  │── Write Image Data ───────────────►│  PrintEmptyRow (0x84) | PrintBitmapRow (0x85) | PrintBitmapRowIndexed (0x83)
+  │── Write Image Data ───────────────►│  one-way: PrintEmptyRow (0x84) | PrintBitmapRow (0x85) | PrintBitmapRowIndexed (0x83)
   │── PageEnd (0xe3) ─────────────────►│  payload: [0x01]
   │                                    │
   │  ↻ status polling loop:            │
   │── PrintStatus (0xa3) ─────────────►│  poll page status
-  │◄─ In_PrintStatus (0xb3) ───────────┤
+  │◄─ In_PrintStatus (0xb3) ───────────┤  payload: [pageIndex(u16), ...], print is finished when pageIndex == totalPages
   │                                    │
   │── PrintEnd (0xf3) ────────────────►│  payload: [0x01]
 ```
@@ -120,12 +122,12 @@ Client                              Printer
   │  ↻ per page loop:                  │
   │── PageStart (0x03) ───────────────►│  payload: [0x01]
   │── SetPageSize (0x13, 9b) ─────────►│  payload: [rows(u16), cols(u16), copiesCount(u16), cutHeight(u16), cutType(u8)]
-  │── Write Image Data ───────────────►│  PrintEmptyRow (0x84) | PrintBitmapRow (0x85) | PrintBitmapRowIndexed (0x83)
+  │── Write Image Data ───────────────►│  one-way: PrintEmptyRow (0x84) | PrintBitmapRow (0x85) | PrintBitmapRowIndexed (0x83)
   │── PageEnd (0xe3) ─────────────────►│  payload: [0x01]
   │                                    │
   │  ↻ status polling loop:            │
   │── PrintStatus (0xa3) ─────────────►│  poll page status
-  │◄─ In_PrintStatus (0xb3) ───────────┤
+  │◄─ In_PrintStatus (0xb3) ───────────┤  payload: [pageIndex(u16), ...], print is finished when pageIndex == totalPages
   │                                    │
   │── PrintEnd (0xf3) ────────────────►│  payload: [0x01]
 ```
@@ -146,12 +148,12 @@ Client                              Printer
   │  ↻ per page loop:                  │
   │── PageStart (0x03) ───────────────►│  payload: [0x01]
   │── SetPageSize (0x13, 6b) ─────────►│  payload: [rows(u16), cols(u16), copiesCount(u16)]
-  │── Write Image Data ───────────────►│  PrintEmptyRow (0x84) | PrintBitmapRow (0x85) | PrintBitmapRowIndexed (0x83)
+  │── Write Image Data ───────────────►│  one-way: PrintEmptyRow (0x84) | PrintBitmapRow (0x85) | PrintBitmapRowIndexed (0x83)
   │── PageEnd (0xe3) ─────────────────►│  payload: [0x01]
   │                                    │
   │  ↻ status polling loop:            │
   │── PrintStatus (0xa3) ─────────────►│  poll page status
-  │◄─ In_PrintStatus (0xb3) ───────────┤
+  │◄─ In_PrintStatus (0xb3) ───────────┤  payload: [pageIndex(u16), ...], print is finished when pageIndex == totalPages
   │                                    │
   │── PrintEnd (0xf3) ────────────────►│  payload: [0x01]
 ```
