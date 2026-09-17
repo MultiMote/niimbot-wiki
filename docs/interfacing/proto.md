@@ -85,7 +85,7 @@
 |   `0xa3`   | [PrintStatus](#printstatus)                                                       |             `0xb3`             |     ✅     |    ❌     |
 |   `0xa5`   | [PrinterStatusData](#printerstatusdata)                                           |             `0xb5`             |     ✅     |    ❌     |
 |   `0xa7`   | [CompressImage](#compressimage)                                                   |          ❌ (one-way)          |     ❌     |     —     |
-|   `0xaf`   | PrinterConfig                                                                     |             `0xbf`             |     ❌     |    ❌     |
+|   `0xaf`   | GetPrinterCapabilities                                                            |             `0xbf`             |     ❌     |    ❌     |
 |   `0xc1`   | [Connect](#connect)                                                               |             `0xc2`             |     ✅     |    ❌     |
 |   `0xc3`   | [PrinterFree](#printerfree)                                                       |             `0xc4`             |     ❌     |    ❌     |
 |   `0xda`   | CancelPrint                                                                       |             `0xd0`             |     ✅     |    ✅     |
@@ -1183,6 +1183,70 @@ Request ID `0xa7`. Transmits large compressed image packets.
        │          └─ Data length (u32) = bitmap_len + 2
        └─ CompressImage identifier
 ```
+
+### GetPrinterCapabilities
+
+Request ID `0xaf`, response `0xbf`.
+
+Request: simple (`55 55 af 01 01 af aa aa`).
+
+#### Response (`0xbf`)
+
+Payload consists of TLV (Type-Length-Value) blocks encoded sequentially:
+* **Type** (`u8`): Capability Field ID (`PrinterCapabilitiesField`).
+* **Length** (`u8`): Byte length of the field value.
+* **Value**: Field-specific value representation.
+
+```
+55 55 bf LL T1 L1 V1... T2 L2 V2... CS aa aa
+          │  │  │  │     └──┴──┤     │
+          │  │  │  │           │     └─ Checksum
+          │  │  │  │           └─────── Next TLV block
+          │  │  │  └────────────────── Value (L1 bytes)
+          │  │  └───────────────────── Length of field (L1 bytes)
+          │  └──────────────────────── Field ID (Type)
+          └────────────────────────── Total payload length
+```
+#### Capability Field IDs
+
+| Field ID | Field Name                  | Data Type & Format        | Description / Notes                                                   |
+| :------: | --------------------------- | ------------------------- | --------------------------------------------------------------------- |
+|  `0x01`  | `Language`                  | `uint8` (bitmask)         | Supported languages (bit positions)                                   |
+|  `0x02`  | `PrintMode`                 | `uint8` (bitmask)         | Supported print modes                                                 |
+|  `0x03`  | `UhfRfid`                   | `uint8` (bitmask)         | UHF RFID capabilities                                                 |
+|  `0x04`  | `PrintheadDpi`              | `uint16`                  | DPI classification (e.g. 200 or 300)                                  |
+|  `0x05`  | `RfidSupport`               | `uint8` (bitmask)         | RFID tag support flags                                                |
+|  `0x06`  | `BatteryRange`              | `uint8[2]` (`[max, min]`) | Battery level bounds                                                  |
+|  `0x07`  | `DensityRange`              | `uint8[2]` (`[max, min]`) | Density adjustment range                                              |
+|  `0x08`  | `SpeedRange`                | `uint8[2]` (`[max, min]`) | Speed adjustment range                                                |
+|  `0x09`  | `SupportedLabelTypes`       | `uint8[4]` (bitmask)      | Supported label types                                                 |
+|  `0x0a`  | `PrintheadWidth`            | `uint16`                  | Printhead width in pixels/dots                                        |
+|  `0x0b`  | `MaxPrintHeight`            | `uint16`                  | Maximum print height in pixels/dots                                   |
+|  `0x0c`  | `LabelHeightAndGap`         | `uint8`                   | Default label height / gap setting                                    |
+|  `0x0d`  | `PrintheadPosition`         | `uint8`                   | Printhead physical position code                                      |
+|  `0x0e`  | `VolumeSupport`             | `uint8` (bitmask)         | Audio volume support                                                  |
+|  `0x0f`  | `HostStyle`                 | `uint8` (bitmask)         | Supported host communication styles                                   |
+|  `0x10`  | `PrintProtocol`             | `uint8` (bitmask)         | Supported print protocol options                                      |
+|  `0x11`  | `AutoShutdownRange`         | `uint8[2]` (`[max, min]`) | Auto-shutdown options range                                           |
+|  `0x12`  | `CutterSupport`             | `uint8` (bitmask)         | Paper cutter capabilities                                             |
+|  `0x13`  | `CutterDepthRange`          | `uint8[2]` (`[max, min]`) | Cutter depth range                                                    |
+|  `0x14`  | `PrintControl`              | `uint8` (bitmask)         | Supported print control flags                                         |
+|  `0x15`  | `PauseTimeSupport`          | `uint8` (bitmask)         | Pause interval options                                                |
+|  `0x16`  | `PaperDetection`            | `uint8`                   | Paper detection mechanism type                                        |
+|  `0x17`  | `RealTimeClock`             | `uint8` (bitmask)         | RTC features support                                                  |
+|  `0x18`  | `KeyFunctions`              | `uint8[]` (5 bytes/item)  | Physical key mappings: `key` (`u8`), `functions` (`uint8[4]` bitmask) |
+|  `0x19`  | `Unknown19`                 | `uint8`                   | Unknown / reserved                                                    |
+|  `0x1a`  | `PrintColor`                | `uint8` (bitmask)         | Supported color modes                                                 |
+|  `0x1b`  | `SpeedQualityMode`          | `uint8` (bitmask)         | Supported speed/quality modes                                         |
+|  `0x1c`  | `TubeCalibration`           | `uint8` (bitmask)         | Tube calibration options                                              |
+|  `0x1d`  | `PartialRetransmitSupport`  | `uint8` (bitmask)         | Partial retransmit capability                                         |
+|  `0x1e`  | `MaxCompressLines`          | `uint16`                  | Max line count per compression unit                                   |
+|  `0x1f`  | `TubeSupport`               | `uint8` (bitmask)         | Tube printing support                                                 |
+|  `0x20`  | `SixteenGrayMaxBuffer`      | `uint16`                  | Maximum buffer size for 16-gray scale                                 |
+|  `0x21`  | `LocalTemplateSupport`      | `uint8` (bitmask)         | Local template capabilities                                           |
+|  `0x22`  | `ImageCompressSupport`      | `uint8` (bitmask)         | Supported image compression modes                                     |
+|  `0x23`  | `MaxImageCompressBytes`     | `uint32` (u32 BE)         | Maximum image compression buffer size                                 |
+|  `0x24`  | `LocalTemplateMaxTimeCount` | `uint8`                   | Max local template execution/time count                               |
 
 ### PrinterCheckLine
 
