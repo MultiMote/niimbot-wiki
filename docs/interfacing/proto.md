@@ -1198,19 +1198,18 @@ Request: simple (`55 55 af 01 01 af aa aa`).
 #### Response (`0xbf`)
 
 Payload consists of TLV (Type-Length-Value) blocks encoded sequentially:
-* **Type** (`u8`): Capability Field ID (`PrinterCapabilitiesField`).
+
+* **Type** (`u8`): Capability [Field ID](#capability-field-ids).
 * **Length** (`u8`): Byte length of the field value.
 * **Value**: Field-specific value representation.
 
 ```
 55 55 bf LL T1 L1 V1... T2 L2 V2... CS aa aa
-          │  │  │  │     └──┴──┤
-          │  │  │  │           │
-          │  │  │  │           └─────── Next TLV block
-          │  │  │  └────────────────── Value (L1 bytes)
-          │  │  └───────────────────── Length of field (L1 bytes)
-          │  └──────────────────────── Field ID (Type)
-          └────────────────────────── Total payload length
+             │  │  │     └──┴──┤
+             │  │  │           └─────── Next TLV block
+             │  │  └────────────────── Value (L1 bytes)
+             │  └───────────────────── Length of field (L1 bytes)
+             └──────────────────────── Field ID (Type)
 ```
 #### Capability Field IDs
 
