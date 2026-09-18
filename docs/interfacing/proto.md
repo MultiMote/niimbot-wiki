@@ -85,7 +85,7 @@
 |   `0xa3`   | [PrintStatus](#printstatus)                                                       |             `0xb3`             |     ✅     |    ❌     |
 |   `0xa5`   | [PrinterStatusData](#printerstatusdata)                                           |             `0xb5`             |     ✅     |    ❌     |
 |   `0xa7`   | [CompressImage](#compressimage)                                                   |          ❌ (one-way)          |     ❌     |     —     |
-|   `0xaf`   | GetPrinterCapabilities                                                            |             `0xbf`             |     ❌     |    ❌     |
+|   `0xaf`   | [GetPrinterCapabilities](#getprintercapabilities)                                 |             `0xbf`             |     ❌     |    ❌     |
 |   `0xc1`   | [Connect](#connect)                                                               |             `0xc2`             |     ✅     |    ❌     |
 |   `0xc3`   | [PrinterFree](#printerfree)                                                       |             `0xc4`             |     ❌     |    ❌     |
 |   `0xda`   | CancelPrint                                                                       |             `0xd0`             |     ✅     |    ✅     |
