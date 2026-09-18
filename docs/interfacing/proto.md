@@ -995,13 +995,15 @@ Data Pattern Mode (Color mode 0x03)
        └─ PrintBitmapRowDoubleColor command
 ```
 
+#### Example
+
 Example for 576 px row:
 
 576 / 8 = 72 bytes
 
 The first part of DD is therefore always 72 bytes.
 
-1. Presence mask
+**Presence mask**
 
 ```
 black = 1
@@ -1019,7 +1021,7 @@ mask:    0 0 0 0 0 1 1 1
 byte:    00000111 = 07
 ```
 
-2. Color mask
+**Color mask**
 
 For every non-empty 8-pixel block:
 
@@ -1083,7 +1085,7 @@ Color data is:
 18 bytes: 00        // black
 ```
 
-So the packet is:
+**Complete packet**
 
 ```
 55 55 8A 80 03 RR RR NN
