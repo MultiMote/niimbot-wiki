@@ -120,6 +120,11 @@
 
 Two-byte values are usually u16 (big-endian).
 
+Common packet parts:
+
+* `LL` - payload size (if not fixed)
+* `CS` - checksum
+
 ### Simple request packet
 
 This packet has `Request ID`, `Data length = 1`, and `Data = 1`.
@@ -197,7 +202,7 @@ Request: simple.
 #### Response (`0xb5`)
 
 ```
-55 55 b5 LL XX XX SC SC PS PS PL PL PI XX CS VH VL DC DC XX AA AA
+55 55 b5 LL XX XX SC SC PS PS PL PL PI XX CS VH VL DC DC CS aa aa
                    └──┤  └──┤  └──┤  │     │  └──┤  └──┤
                       │     │     │  │     │     │     └─ Double Color Max Cache Size
                       │     │     │  │     │     └─────── Protocol Version
@@ -235,9 +240,9 @@ Request: data = 1 byte.
 Example (get serial number):
 
 ```
-55 55 40 01 0b XX aa aa
-       │  │  │  │
-       │  │  │  └─ Checksum
+55 55 40 01 0b CS aa aa
+       │  │  │
+       │  │  │
        │  │  └─ Data = 0x0b (SerialNumber)
        │  └─ Data length = 1
        └─ PrinterInfo command
@@ -256,9 +261,9 @@ Example (get serial number):
 ### SetDensity
 
 ```
-55 55 21 01 VV XX aa aa
-       │  │  │  │
-       │  │  │  └─ Checksum
+55 55 21 01 VV CS aa aa
+       │  │  │
+       │  │  │
        │  │  └─ Density value (model-specific range, typically 1–5)
        │  └─ Data length = 1
        └─ SetDensity command
@@ -269,9 +274,9 @@ Response (`0x31`): simple.
 ### SetPrintSpeed
 
 ```
-55 55 22 01 VV XX aa aa
-       │  │  │  │
-       │  │  │  └─ Checksum
+55 55 22 01 VV CS aa aa
+       │  │  │
+       │  │  │
        │  │  └─ Print speed value
        │  └─ Data length = 1
        └─ SetPrintSpeed command
@@ -282,9 +287,9 @@ Response (`0x32`): simple.
 ### SetLabelType
 
 ```
-55 55 23 01 VV XX aa aa
-       │  │  │  │
-       │  │  │  └─ Checksum
+55 55 23 01 VV CS aa aa
+       │  │  │
+       │  │  │
        │  │  └─ LabelType value
        │  └─ Data length = 1
        └─ SetLabelType command
@@ -297,9 +302,9 @@ Response (`0x33`): simple.
 ### SetLanguageType
 
 ```
-55 55 26 01 VV XX aa aa
-       │  │  │  │
-       │  │  │  └─ Checksum
+55 55 26 01 VV CS aa aa
+       │  │  │
+       │  │  │
        │  │  └─ Language type value
        │  └─ Data length = 1
        └─ SetLanguageType command
@@ -310,9 +315,9 @@ Response (`0x36`): simple.
 ### SetAutoShutdownTime
 
 ```
-55 55 27 01 VV XX aa aa
-       │  │  │  │
-       │  │  │  └─ Checksum
+55 55 27 01 VV CS aa aa
+       │  │  │
+       │  │  │
        │  │  └─ AutoShutdownTime value (1–4)
        │  └─ Data length = 1
        └─ SetAutoShutdownTime command
@@ -332,9 +337,9 @@ Response (`0x37`): simple.
 ### SetVolumeLevel
 
 ```
-55 55 2e 01 VV XX aa aa
-       │  │  │  │
-       │  │  │  └─ Checksum
+55 55 2e 01 VV CS aa aa
+       │  │  │
+       │  │  │
        │  │  └─ Volume level value
        │  └─ Data length = 1
        └─ SetVolumeLevel command
@@ -345,9 +350,9 @@ Response (`0x3e`): simple.
 ### SetCurrentTimeFormat
 
 ```
-55 55 11 02 02 VV XX aa aa
-       │  │  │  │  │
-       │  │  │  │  └─ Checksum
+55 55 11 02 02 VV CS aa aa
+       │  │  │  │
+       │  │  │  │
        │  │  │  └─ Format value
        │  │  └─ Constant byte (0x02)
        │  └─ Data length = 2
@@ -359,9 +364,9 @@ Response (`0x12`): simple.
 ### SetReversePrinterFeed
 
 ```
-55 55 1e 09 01 00 01 00 00 02 f8 01 f4 XX aa aa
-       │  │                             │
-       │  │                             └─ Checksum
+55 55 1e 09 01 00 01 00 00 02 f8 01 f4 CS aa aa
+       │  │
+       │  │
        │  └─ Data length = 9
        └─ SetReversePrinterFeed command
 ```
@@ -373,9 +378,9 @@ Response (`0x1f`).
 Request ID `0x5c`, response `0x6c`.
 
 ```
-55 55 5c 02 OP VV XX aa aa
-       │  │  │  │  │
-       │  │  │  │  └─ Checksum
+55 55 5c 02 OP VV CS aa aa
+       │  │  │  │
+       │  │  │  │
        │  │  │  └─ Value
        │  │  └─ Operation
        │  └─ Data length = 2
@@ -389,9 +394,9 @@ Data: `0x01` = on, `0x00` = off, `0x01` is used for get operation.
 ### PrintQuantity
 
 ```
-55 55 15 02 QH QL XX aa aa
-       │  │  └──┤  │
-       │  │     │  └─ Checksum
+55 55 15 02 QH QL CS aa aa
+       │  │  └──┤
+       │  │     │
        │  │     └─ Quantity
        │  └─ Data length = 2
        └─ PrintQuantity command
@@ -414,9 +419,9 @@ Response (`0x02`): simple.
 #### 2 bytes
 
 ```
-55 55 01 02 PH PL XX aa aa
-       │  │  └──┤  │
-       │  │     │  └─ Checksum
+55 55 01 02 PH PL CS aa aa
+       │  │  └──┤
+       │  │     │
        │  │     └─ Total pages
        │  └─ Data length = 2
        └─ PrintStart command
@@ -425,9 +430,9 @@ Response (`0x02`): simple.
 #### 7 bytes — used in B1 and newer printers
 
 ```
-55 55 01 07 PH PL 00 00 00 00 CC XX aa aa
-       │  │  └──┤  └──┴──┴──┘  │  │
-       │  │     │   Always 0   │  └─ Checksum
+55 55 01 07 PH PL 00 00 00 00 CC CS aa aa
+       │  │  └──┤  └──┴──┴──┘  │
+       │  │     │   Always 0   │
        │  │     │              └─ Page color (0 = default)
        │  │     └─ Total pages
        │  └─ Data length = 7
@@ -437,9 +442,9 @@ Response (`0x02`): simple.
 #### 9 bytes — first seen on D110M v4 / B21_PRO
 
 ```
-55 55 01 09 PH PL 00 00 00 00 CC SS FF XX aa aa
-       │  │  └──┤  └──┴──┴──┘  │  │  │  │
-       │  │     │   Always 0   │  │  │  └─ Checksum
+55 55 01 09 PH PL 00 00 00 00 CC SS FF CS aa aa
+       │  │  └──┤  └──┴──┴──┘  │  │  │
+       │  │     │   Always 0   │  │  │
        │  │     │              │  │  └─ Some flag (purpose unknown)
        │  │     │              │  └─ Speed (0 = quality/slow, 1 = speed/fast)
        │  │     │              └─ Page color
@@ -456,9 +461,9 @@ Can have different payload size depending on the model. Column count must not ex
 #### 2 bytes
 
 ```
-55 55 13 02 RR RR XX aa aa
-       │  │  └──┤  │
-       │  │     │  └─ Checksum
+55 55 13 02 RR RR CS aa aa
+       │  │  └──┤
+       │  │     │
        │  │     └─ Row count (height in pixels)
        │  └─ Data length = 2
        └─ SetPageSize command
@@ -467,9 +472,9 @@ Can have different payload size depending on the model. Column count must not ex
 #### 4 bytes
 
 ```
-55 55 13 04 RR RR CC CC XX aa aa
-       │  │  └──┤  └──┤  │
-       │  │     │     │  └─ Checksum
+55 55 13 04 RR RR CC CC CS aa aa
+       │  │  └──┤  └──┤
+       │  │     │     │
        │  │     │     └─ Column count (width in pixels)
        │  │     └─ Row count (height in pixels)
        │  └─ Data length = 4
@@ -480,9 +485,9 @@ Can have different payload size depending on the model. Column count must not ex
 #### 6 bytes
 
 ```
-55 55 13 06 RR RR CC CC QQ QQ XX aa aa
-       │  │  └──┤  └──┤  └──┤  │
-       │  │     │     │     │  └─ Checksum
+55 55 13 06 RR RR CC CC QQ QQ CS aa aa
+       │  │  └──┤  └──┤  └──┤
+       │  │     │     │     │
        │  │     │     │     └─ Copies count
        │  │     │     └─ Column count (width in pixels)
        │  │     └─ Row count (height in pixels)
@@ -493,9 +498,9 @@ Can have different payload size depending on the model. Column count must not ex
 #### 9 bytes
 
 ```
-55 55 13 09 RR RR CC CC QQ QQ SS SS 00 XX aa aa
-       │  │  └──┤  └──┤  └──┤  └──┤  │  │
-       │  │     │     │     │     │  │  └─ Checksum
+55 55 13 09 RR RR CC CC QQ QQ SS SS 00 CS aa aa
+       │  │  └──┤  └──┤  └──┤  └──┤  │
+       │  │     │     │     │     │  │
        │  │     │     │     │     │  └─ Is divide (0 or 1; purpose unknown)
        │  │     │     │     │     └─ Some size (purpose unknown)
        │  │     │     │     └─ Copies count
@@ -508,9 +513,9 @@ Can have different payload size depending on the model. Column count must not ex
 #### 13 bytes
 
 ```
-55 55 13 0d RR RR CC CC QQ QQ KK KK CT 00 SA PP PP XX aa aa
-       │  │  └──┤  └──┤  └──┤  └──┤  │     │  └──┤  │
-       │  │     │     │     │     │  │     │     │  └─ Checksum
+55 55 13 0d RR RR CC CC QQ QQ KK KK CT 00 SA PP PP CS aa aa
+       │  │  └──┤  └──┤  └──┤  └──┤  │     │  └──┤
+       │  │     │     │     │     │  │     │     │
        │  │     │     │     │     │  │     │     └─ Part height (u16, purpose unknown)
        │  │     │     │     │     │  │     └─ Send all flag (0 or 1)
        │  │     │     │     │     │  └─ Cut type (purpose unknown)
@@ -525,9 +530,9 @@ Can have different payload size depending on the model. Column count must not ex
 #### 45 bytes
 
 ```
-55 55 13 0d RR RR CC CC QQ QQ KK KK CT 00 SA PP PP [SS..SS] XX aa aa
-       │  │  └──┤  └──┤  └──┤  └──┤  │     │  └──┤     │     │
-       │  │     │     │     │     │  │     │     │     │     └─ Checksum
+55 55 13 0d RR RR CC CC QQ QQ KK KK CT 00 SA PP PP [SS..SS] CS aa aa
+       │  │  └──┤  └──┤  └──┤  └──┤  │     │  └──┤     │
+       │  │     │     │     │     │  │     │     │     │
        │  │     │     │     │     │  │     │     │     └─ Serial (32 bytes)
        │  │     │     │     │     │  │     │     └─ Part height (u16, purpose unknown)
        │  │     │     │     │     │  │     └─ Send all flag (0 or 1)
@@ -557,9 +562,9 @@ Request (`0xa3`): simple.
 Minimum 4 bytes; may be 8 or 10 bytes.
 
 ```
-55 55 B3 LL PH PL PP PF XX XX EC XX aa aa
-          │  └──┤  │  │        │  │
-          │     │  │  │        │  └─ Checksum
+55 55 B3 LL PH PL PP PF XX XX EC CS aa aa
+          │  └──┤  │  │        │
+          │     │  │  │        │
           │     │  │  │        └─ Error code (present if LL == 10; non-zero triggers PrintError)
           │     │  │  └─ Page feed progress (0-100 %)
           │     │  └─ Page print progress (0-100 %)
@@ -591,9 +596,9 @@ Known items:
 #### Set Printer Time (`0x07`)
 
 ```
-55 55 07 08 01 YH YL MM DD hh mm ss XX aa aa
-       │  │  │  └──┤  │  │  │  │  │  │
-       │  │  │     │  │  │  │  │  │  └─ Checksum
+55 55 07 08 01 YH YL MM DD hh mm ss CS aa aa
+       │  │  │  └──┤  │  │  │  │  │
+       │  │  │     │  │  │  │  │  │
        │  │  │     │  │  │  │  │  └─ Second
        │  │  │     │  │  │  │  └─ Minute
        │  │  │     │  │  │  └─ Hour
@@ -638,9 +643,9 @@ Request: simple.
 If `dataLength == 1`: tag not present.
 
 ```
-55 55 ID LL U1 U2 U3 U4 U5 U6 U7 U8 BC ... SN ... AP AP UP UP CT [CP CP] U1 U2 U3 U4 U5 U6 U7 U8 XX aa aa
-       │  │  └────────────────────┤  │      │      └──┤  └──┤  │   └──┤   └────────────────────┤  │
-       │  │                       │  │      │         │     │  │      │                        │  └─ Checksum
+55 55 ID LL U1 U2 U3 U4 U5 U6 U7 U8 BC ... SN ... AP AP UP UP CT [CP CP] U1 U2 U3 U4 U5 U6 U7 U8 CS aa aa
+       │  │  └────────────────────┤  │      │      └──┤  └──┤  │   └──┤   └────────────────────┤
+       │  │                       │  │      │         │     │  │      │                        │
        │  │                       │  │      │         │     │  │      │                        └─ Secondary tag UUID (optional)
        │  │                       │  │      │         │     │  │      └─ Capacity (u16, optional)
        │  │                       │  │      │         │     │  └─ Consumable type (u8)
@@ -657,8 +662,8 @@ If `dataLength == 1`: tag not present.
 ### TubeSettings
 
 ```
-55 55 0e 03 02 01 01 XX aa aa   ← tube calibration
-55 55 0e 03 02 02 01 XX aa aa   ← set tube length
+55 55 0e 03 02 01 01 CS aa aa   ← tube calibration
+55 55 0e 03 02 02 01 CS aa aa   ← set tube length
 ```
 
 ### TubeTypeAndWidth
@@ -672,7 +677,7 @@ Get request:
 Set request:
 
 ```
-55 55 0f 05 01 01 TT WW WH XX aa aa
+55 55 0f 05 01 01 TT WW WH CS aa aa
 ```
 
 where `TT` is tube type and `WW WH` is width multiplied by 100 and encoded as u16 big-endian. Data length is `5`.
@@ -690,9 +695,9 @@ Request:
 The response contains two u32 counters:
 
 ```
-55 55 19 08 IU IU IU IU OU OU OU OU XX aa aa
-       │  │  └────────┤  └────────┤  │
-       │  │           │           │  └─ Checksum
+55 55 19 08 IU IU IU IU OU OU OU OU CS aa aa
+       │  │  └────────┤  └────────┤
+       │  │           │           │
        │  │           │           └─ Outer use counter (u32)
        │  │           └─ Inner use counter (u32)
        │  └─ Data length = 8
@@ -718,7 +723,7 @@ Response `0x3c`:
 Request:
 
 ```
-55 55 2f 01 VV XX aa aa
+55 55 2f 01 VV CS aa aa
 ```
 
 where `VV` is the anti-counterfeit level.
@@ -733,7 +738,7 @@ Response `0x3f`:
 Request:
 
 ```
-55 55 2d 01 VV XX aa aa
+55 55 2d 01 VV CS aa aa
 ```
 
 where `VV` is the label-material value.
@@ -748,7 +753,7 @@ Response `0x3d`:
 Request:
 
 ```
-55 55 8e 01 VV XX aa aa
+55 55 8e 01 VV CS aa aa
 ```
 
 Response `0x8f`:
@@ -777,9 +782,9 @@ Returns the current paper information from RFID tag. Only available for protocol
 Response: `0x69`.
 
 ```
-55 55 69 12 GH GL TH TL PT GH GL TH TL PW PL PW PL DR TL TL TL TL XX aa aa
-       │  │  └──┤  └──┤  │  └──┤  └──┤  └──┤  └──┤  │  └──┤  └──┤  │
-       │  │     │     │  │     │     │     │     │  │     │     │  └─ Checksum
+55 55 69 12 GH GL TH TL PT GH GL TH TL PW PL PW PL DR TL TL TL TL CS aa aa
+       │  │  └──┤  └──┤  │  └──┤  └──┤  └──┤  └──┤  │  └──┤  └──┤
+       │  │     │     │  │     │     │     │     │  │     │     │
        │  │     │     │  │     │     │     │     │  │     │     └─ Tail length (u16 / 10)
        │  │     │     │  │     │     │     │     │  │     └─ Tail length pixel (u16)
        │  │     │     │  │     │     │     │     │  └─ Direction (u8)
@@ -828,7 +833,7 @@ Response `0xc4`:
 Current time format:
 
 ```
-55 55 11 02 02 VV XX aa aa
+55 55 11 02 02 VV CS aa aa
 ```
 
 where `VV` is the time-format value.
@@ -836,7 +841,7 @@ where `VV` is the time-format value.
 Local template data:
 
 ```
-55 55 11 LL 01 ... XX aa aa
+55 55 11 LL 01 ... CS aa aa
 ```
 
 The first data byte is `0x01`; each local-template record occupies 33 bytes. The Official SDK starts the request with `0x11`, payload length `1 + 33 * recordCount`, and then serializes the template records.
@@ -844,7 +849,7 @@ The first data byte is `0x01`; each local-template record occupies 33 bytes. The
 ### Pause
 
 ```
-55 55 a6 01 VV XX aa aa
+55 55 a6 01 VV CS aa aa
              │
              └─ Data = 0x01 (pause) or 0x02 (resume)
 ```
@@ -856,7 +861,7 @@ Response (`0xb6`): simple.
 The SDK requests history records with a sequence of packets:
 
 ```
-55 55 52 01 NN XX aa aa
+55 55 52 01 NN CS aa aa
 ```
 
 where `NN` starts at `0x01` and increments while records are returned.
@@ -881,9 +886,9 @@ The response is variable-length.
 Fills a row range with blank (white) pixels. One-way (no response expected).
 
 ```
-55 55 84 03 RR RR NN XX aa aa
-       │  │  └──┤  │  │
-       │  │     │  │  └─ Checksum
+55 55 84 03 RR RR NN CS aa aa
+       │  │  └──┤  │
+       │  │     │  │
        │  │     │  └─ Repeat count (print this empty row NN times)
        │  │     └─ Row number
        │  └─ Data length = 3
@@ -895,9 +900,9 @@ Fills a row range with blank (white) pixels. One-way (no response expected).
 Sends a full bitmap row including both black and white pixels. One-way (no response expected).
 
 ```
-55 55 85 LL RR RR C1 C2 C3 NN DD ... DD XX aa aa
-       │  │  └──┤  └──┴──┤  │  └─────┤  │
-       │  │     │        │  │        │  └─ Checksum
+55 55 85 LL RR RR C1 C2 C3 NN DD ... DD CS aa aa
+       │  │  └──┤  └──┴──┤  │  └─────┤
+       │  │     │        │  │        │
        │  │     │        │  │        └─ Pixel data (cols/8 bytes)
        │  │     │        │  └─ Repeat count
        │  │     │        └─ Black pixel count segment (3 bytes, see below)
@@ -913,10 +918,8 @@ Image row example:
 Packet example:
 
 ```
-55 55 85 0a 00 00 13 00 00 01 ff 00 df 0f XX aa aa
-       │  │  └──┤  └──┴──┤  │  └──┴──┴──┤  │
-       │  │     │        │  │           │  └─ Checksum
-       │  │     │        │  │           │
+55 55 85 0a 00 00 13 00 00 01 ff 00 df 0f CS aa aa
+       │  │  └──┤  └──┴──┤  │  └──┴──┴──┤
        │  │     │        │  │           └─ Draw 32 pixels (19 black, 13 empty)
        │  │     │        │  └─ Repeat count (repeat row 1 time)
        │  │     │        └─ Black pixel count (19)
@@ -941,8 +944,8 @@ PrintEmptyRow (SubCmd 0x84)
 
 ```
 55 55 8a 05 00 84 RR RR NN CS aa aa
-       │  │  │  │  └──┤  │  │
-       │  │  │  │     │  │  └─ Checksum
+       │  │  │  │  └──┤  │
+       │  │  │  │     │  │
        │  │  │  │     │  └─ Repeat count
        │  │  │  │     └─ Row number
        │  │  │  └─ Sub-command = 0x84
@@ -955,8 +958,8 @@ PrintBitmapRowIndexed (SubCmd 0x83)
 
 ```
 55 55 8a LL CC 83 RR RR NN II II ... CS aa aa
-       │  │  │  │  └──┤  │  └──────┤  │
-       │  │  │  │     │  │         │  └─ Checksum
+       │  │  │  │  └──┤  │  └──────┤
+       │  │  │  │     │  │         │
        │  │  │  │     │  │         └─ Pixel indexes (2 bytes per index)
        │  │  │  │     │  └─ Repeat count
        │  │  │  │     └─ Row number
@@ -970,8 +973,8 @@ PrintBitmapRow (SubCmd 0x85)
 
 ```
 55 55 8a LL CC 85 RR RR NN DD ... DD CS aa aa
-       │  │  │  │  └──┤  │  └──────┤  │
-       │  │  │  │     │  │         │  └─ Checksum
+       │  │  │  │  └──┤  │  └──────┤
+       │  │  │  │     │  │         │
        │  │  │  │     │  │         └─ Raw pixel data
        │  │  │  │     │  └─ Repeat count
        │  │  │  │     └─ Row number
@@ -985,8 +988,8 @@ Data Pattern Mode (Color mode 0x03)
 
 ```
 55 55 8a LL 03 RR RR NN DD ... DD CS aa aa
-       │  │  │  └──┤  │  └─────┤  │
-       │  │  │     │  │        │  └─ Checksum
+       │  │  │  └──┤  │  └─────┤
+       │  │  │     │  │        │
        │  │  │     │  │        └─ Presence mask + Color mask
        │  │  │     │  └─ Repeat count
        │  │  │     └─ Row number
@@ -1114,9 +1117,9 @@ Usually the printer works correctly when all three bytes are `0x00`.
 Example:
 
 ```
-55 55 85 0a 00 00 13 00 00 01 ff 00 df 0f XX aa aa
-       │  │  └──┤  └──┴──┤  │  └──┴──┴──┤  │
-       │  │     │        │  │           │  └─ Checksum
+55 55 85 0a 00 00 13 00 00 01 ff 00 df 0f CS aa aa
+       │  │  └──┤  └──┴──┤  │  └──┴──┴──┤
+       │  │     │        │  │           │
        │  │     │        │  │           └─ 4 bytes pixel data (32 pixels: 19 black, 13 white)
        │  │     │        │  └─ Repeat = 1
        │  │     │        └─ Pixel count segment: C1=0x00, C2=0x00, C3=0x13 (19 total)
@@ -1132,9 +1135,9 @@ Used when **black pixel count ≤ 6**. Encodes only the positions of black pixel
 If pixel count exceeds 6 the library throws an error and uses `PrintBitmapRow` instead.
 
 ```
-55 55 83 LL RR RR C1 C2 C3 NN II II II II ... XX aa aa
-       │  │  └──┤  └──┴──┤  │  └──┴──┴──────┤  │
-       │  │     │        │  │               │  └─ Checksum
+55 55 83 LL RR RR C1 C2 C3 NN II II II II ... CS aa aa
+       │  │  └──┤  └──┴──┤  │  └──┴──┴──────┤
+       │  │     │        │  │               │
        │  │     │        │  │               └─ Pixel indexes (2 bytes each)
        │  │     │        │  └─ Repeat count
        │  │     │        └─ Black pixel count segment (same format as PrintBitmapRow)
@@ -1146,9 +1149,9 @@ If pixel count exceeds 6 the library throws an error and uses `PrintBitmapRow` i
 Example (2 black pixels at positions 10, 320):
 
 ```
-55 55 83 0a 00 03 02 00 00 02 00 0a 01 40 XX aa aa
-       │  │  └──┤  └──┴──┤  │  └──┤  └──┤  │
-       │  │     │        │  │     │     │  └─ Checksum
+55 55 83 0a 00 03 02 00 00 02 00 0a 01 40 CS aa aa
+       │  │  └──┤  └──┴──┤  │  └──┤  └──┤
+       │  │     │        │  │     │     │
        │  │     │        │  │     │     └─ Pixel at x=320
        │  │     │        │  │     └─ Pixel at index x=10
        │  │     │        │  └─ Repeat = 2
@@ -1164,8 +1167,8 @@ Request ID `0x87`. Wraps and compresses image row data or commands.
 
 ```
 55 55 87 LL LL CH CL XX ... XX CS aa aa
-       │  └──┤  └──┤  │      │  │
-       │     │     │  │      │  └─ Checksum
+       │  └──┤  └──┤  │      │
+       │     │     │  │      │
        │     │     │  └──────┴─ Compressed payload bytes
        │     │     └─ Original uncompressed length (u16)
        │     └─ Data length (u16) = payload_len + 2
@@ -1178,8 +1181,8 @@ Request ID `0xa7`. Transmits large compressed image packets.
 
 ```
 55 55 a7 L1 L2 L3 L4 CH CL XX ... XX CS aa aa
-       │  └───────┤  └──┤  │      │  │
-       │          │     │  │      │  └─ Checksum
+       │  └───────┤  └──┤  │      │
+       │          │     │  │      │
        │          │     │  └──────┴─ Compressed bitmap data bytes
        │          │     └─ Original size (u16)
        │          └─ Data length (u32) = bitmap_len + 2
@@ -1201,8 +1204,8 @@ Payload consists of TLV (Type-Length-Value) blocks encoded sequentially:
 
 ```
 55 55 bf LL T1 L1 V1... T2 L2 V2... CS aa aa
-          │  │  │  │     └──┴──┤     │
-          │  │  │  │           │     └─ Checksum
+          │  │  │  │     └──┴──┤
+          │  │  │  │           │
           │  │  │  │           └─────── Next TLV block
           │  │  │  └────────────────── Value (L1 bytes)
           │  │  └───────────────────── Length of field (L1 bytes)
@@ -1255,9 +1258,9 @@ Payload consists of TLV (Type-Length-Value) blocks encoded sequentially:
 Sent from the printer periodically during printing (every 200 rows).
 
 ```
-55 55 86 03 RR RR 01 XX aa aa
-       │  │  └──┤  │  │
-       │  │     │  │  └─ Checksum
+55 55 86 03 RR RR 01 CS aa aa
+       │  │  └──┤  │
+       │  │     │  │
        │  │     │  └─ Always 0x01
        │  │     └─ Row number
        │  └─ Data length = 3
@@ -1290,10 +1293,13 @@ Sent by the client every 2000 ms (default interval) after connection.
 
 ### Response — Advanced1 (`0xdd`)
 
+Purpose of skipped bytes is unknown, they are ignored in official SDK.
+
 #### 10 bytes (e.g. D110)
 
 ```
-55 55 dd 0a [8 bytes skipped] LC CL XX aa aa
+55 55 dd 0a [8 bytes skipped] LC CL CS aa aa
+                               │  │
                                │  │
                                │  └─ Lid Closed (0 = closed)
                                └─ Charge Level
@@ -1302,35 +1308,35 @@ Sent by the client every 2000 ms (default interval) after connection.
 #### 13 bytes (e.g. B1)
 
 ```
-55 55 dd 0d XX XX XX XX XX XX XX XX XX LC CL PI RF XX aa aa
-                                        │  │  │  │  │
-                                        │  │  │  │  └─ Checksum
-                                        │  │  │  └─ Paper RFID Success (1 = ok)
-                                        │  │  └─ Paper Inserted (0 = inserted)
-                                        │  └─ Charge Level
-                                        └─ Lid Closed (0 = closed)
+55 55 dd 0d [9 bytes skipped] LC CL PI RF CS aa aa
+                               │  │  │  │
+                               │  │  │  │
+                               │  │  │  └─ Paper RFID Success (1 = ok)
+                               │  │  └─ Paper Inserted (0 = inserted)
+                               │  └─ Charge Level
+                               └─ Lid Closed (0 = closed)
 ```
 
 #### 19 bytes
 
 ```
-55 55 dd 13 XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX LC CL PI RF XX aa aa
-                                                          │  │  │  │  │
-                                                          │  │  │  │  └─ Checksum
-                                                          │  │  │  └─ Paper RFID Success (1 = ok)
-                                                          │  │  └─ Paper Inserted (0 = inserted)
-                                                          │  └─ Charge Level
-                                                          └─ Lid Closed (0 = closed)
+55 55 dd 13 [15 bytes skipped] LC CL PI RF CS aa aa
+                                │  │  │  │
+                                │  │  │  │
+                                │  │  │  └─ Paper RFID Success (1 = ok)
+                                │  │  └─ Paper Inserted (0 = inserted)
+                                │  └─ Charge Level
+                                └─ Lid Closed (0 = closed)
 ```
 
 #### 20 bytes
 
 ```
-55 55 dd 14 XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX XX PI RF XX aa aa
-                                                                   │  │  │
-                                                                   │  │  └─ Checksum
-                                                                   │  └─ Paper RFID Success (1 = ok)
-                                                                   └─ Paper Inserted (0 = inserted)
+55 55 dd 14 [18 bytes skipped] PI RF CS aa aa
+                                │  │
+                                │  │
+                                │  └─ Paper RFID Success (1 = ok)
+                                └─ Paper Inserted (0 = inserted)
 ```
 
 For the legacy `0xdd` response, the Official SDK parser selects the payload layout from the printer model ID:
@@ -1355,7 +1361,7 @@ Minimum payload length: **9 bytes**.
 ```
                                         ┌ Other bytes starting from this byte are optional (inclusive)
                                         │
-55 55 d9 XX 2e c3 64 4d 00 00 01 01 00 00 00 00 00 00 XX aa aa
+55 55 d9 LL 2e c3 64 4d 00 00 01 01 00 00 00 00 00 00 CS aa aa
                    │  │  │  │  │  │  │  └──┤     │  │
                    │  │  │  │  │  │  │     │     │  └─ VoltageState
                    │  │  │  │  │  │  │     │     └─ LightingErrorCode
@@ -1372,7 +1378,7 @@ Minimum payload length: **9 bytes**.
 ### Response — PrinterInfo (`0xde`)
 
 ```
-55 55 de 0a VH VL VH VL WH WL AC HA SR SW XX aa aa
+55 55 de 0a VH VL VH VL WH WL AC HA SR SW CS aa aa
              └──┤  └──┤  └──┤  │  │  │  │
                 │     │     │  │  │  │  └─ Supports write RFID
                 │     │     │  │  │  └─ Supports RFID
