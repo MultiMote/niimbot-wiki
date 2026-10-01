@@ -17,6 +17,8 @@
 | Printer type                           | thermal                 |
 <!-- END CLOUD_INFO -->
 
+B1 HW 5.x with FW 5.26+ is confirmed to support double-color printing (red/black paper).
+
 ## HW 5.10
 
 
