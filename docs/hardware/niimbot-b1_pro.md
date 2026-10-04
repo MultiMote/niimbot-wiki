@@ -17,14 +17,15 @@
 | Printer type                           | thermal                 |
 <!-- END CLOUD_INFO -->
 
+Uses compressed firmware.
+
 ## HW
 
-| Parameter             | Value                            |
-|-----------------------|----------------------------------|
-| MCU                   | SiFli SF32BPRTU36                |
-| Firmware base address | ⚠ Firmware seems to be encrypted |
-| Firmware file offset  | ?                                |
-
+| Parameter             | Value             |
+| --------------------- | ----------------- |
+| MCU                   | SiFli SF32BPRTU36 |
+| Firmware base address | 0x10009000        |
+| Firmware file offset  | 0x1C (compressed) |
 
 ![pcb_2](files/b1_pro/B1_Pro_pcb_2.jpeg)
 

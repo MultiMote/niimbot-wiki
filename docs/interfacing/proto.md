@@ -1249,7 +1249,7 @@ Payload consists of TLV (Type-Length-Value) blocks encoded sequentially:
 |  `0x20`  | `SixteenGrayMaxBuffer`      | `uint16`                  | Maximum buffer size for 16-gray scale                                 |
 |  `0x21`  | `LocalTemplateSupport`      | `uint8` (bitmask)         | Local template capabilities                                           |
 |  `0x22`  | `ImageCompressSupport`      | `uint8` (bitmask)         | Supported image compression modes                                     |
-|  `0x23`  | `MaxImageCompressBytes`     | `uint32` (u32 BE)         | Maximum image compression buffer size                                 |
+|  `0x23`  | `MaxImageCompressBytes`     | `uint32`                  | Maximum image compression buffer size                                 |
 |  `0x24`  | `LocalTemplateMaxTimeCount` | `uint8`                   | Max local template execution/time count                               |
 
 ### PrinterCheckLine
