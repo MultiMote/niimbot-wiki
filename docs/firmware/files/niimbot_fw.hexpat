@@ -6,10 +6,10 @@ struct FirmwareHeader {
     u8 random_data[3];
     u32 fw_length;
     u32 fw_crc;
-    u32 unknown1;
-    u32 unknown2;
+    u32 reserved1;
+    u32 reserved2;
     u8 fw_version[2];
-    u8 unknown3[2];
+    u16 model_id;
     u32 header_crc;
 };
 

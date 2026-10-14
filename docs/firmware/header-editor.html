@@ -117,8 +117,8 @@
             <tr>
               <td>0x16</td>
               <td>2</td>
-              <td class="data unk3"></td>
-              <td>Unknown</td>
+              <td class="data model-id"></td>
+              <td>Device model ID</td>
             </tr>
             <tr>
               <td>0x18</td>
@@ -206,7 +206,8 @@
         tableEl.querySelectorAll(".fix.ver-edit").forEach((e) => e.classList.remove("hidden"));
 
         const verNumber = (fwHeader[0x15] << 8) + fwHeader[0x14];
-
+        const modelId = (fwHeader[0x17] << 8) + fwHeader[0x16];
+// bufToHex(fwHeader.slice(0x16, 0x18))
         const fwlen = bytesToI32(fwHeader.slice(0x04, 0x08));
 
         tableEl.querySelector(".data.sign").textContent = bufToHex(fwHeader.slice(0x00, 0x01));
@@ -216,10 +217,11 @@
         tableEl.querySelector(".data.unk1").textContent = bufToHex(fwHeader.slice(0x0c, 0x10));
         tableEl.querySelector(".data.unk2").textContent = bufToHex(fwHeader.slice(0x10, 0x14));
         tableEl.querySelector(".data.fw-ver").textContent = `${bufToHex(fwHeader.slice(0x14, 0x16))} (${(verNumber / 100).toFixed(2)})`;
-        tableEl.querySelector(".data.unk3").textContent = bufToHex(fwHeader.slice(0x16, 0x18));
+        tableEl.querySelector(".data.model-id").textContent = modelId;
         tableEl.querySelector(".data.crc-header").textContent = bufToHex(fwHeader.slice(0x18, 0x1c));
         tableEl.querySelector(".data.fw-bytes").textContent = bufToHex(fwBody.slice(0x00, 0x04)) + " ...";
-        tableEl.querySelector(".data.fw-len-int").textContent = `${fwlen}`;
+        const lenWarn = fwBody.length !== fwlen ? ` (expected ${fwlen})` : "";
+        tableEl.querySelector(".data.fw-len-int").textContent = `${fwBody.length}${lenWarn}`;
 
         const fwCrc = calcFwCrc();
         const headerCrc = calcHeaderCrc();
