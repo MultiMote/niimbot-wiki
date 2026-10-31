@@ -55,3 +55,5 @@ First seen in B1 PRO. Compressed with DEFLATE algorithm.
 | `...`  | ...    | ...           | Repeated until entire firmware is represented                       |
 
 [Firmware repacker](firmware-repacker.html) (works in browser)
+
+Firmware structure and compression algorithm was reverse engineered by mode01.
