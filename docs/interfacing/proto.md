@@ -14,6 +14,19 @@
 * **Checksum** - calculated by XOR of all bytes from **Command** to the last byte of **Data** (inclusive).
 * **Tail** - always 2 bytes (`0xAA` `0xAA`).
 
+### 16-bit length packet
+
+![](images/packet16.png)
+
+* **Head** - always 2 bytes (`0x55` `0x55`).
+* **Command** - command (packet) identifier.
+* **Data Length** - number of bytes of data, encoded as a big-endian `u16`.
+* **Data** - data with **Data length** length.
+* **Checksum** - XOR of **Command**, both bytes of **Data Length**, and all **Data** bytes (inclusive).
+* **Tail** - always 2 bytes (`0xAA` `0xAA`).
+
+Used by the grayscale row command `PrintBitmapRowGray` (`0x8d`), whose payload can exceed 255 bytes.
+
 ### CRC32 (firmware) packet
 
 ![](images/crc32packet.png)
@@ -76,6 +89,7 @@
 |   `0x84`   | [PrintEmptyRow](#printemptyrow)                                                   |          ❌ (one-way)          |     ❌     |     —     |
 |   `0x85`   | [PrintBitmapRow](#printbitmaprow)                                                 |          ❌ (one-way)          |     ❌     |     —     |
 |   `0x8a`   | [PrintBitmapRowDoubleColor](#printbitmaprowdoublecolor)                           |          ❌ (one-way)          |     ❌     |     —     |
+|   `0x8d`   | [PrintBitmapRowGray](#printbitmaprowgray)                                         |          ❌ (one-way)          |     ❌     |     —     |
 |   `0x86`   | [PrinterCheckLine](#printercheckline)                                             |             `0xd3`             |     ❌     |    ❌     |
 |   `0x87`   | [CompressCommand](#compresscommand)                                               |          ❌ (one-way)          |     ❌     |     —     |
 |   `0x8e`   | [LabelPositioningCalibration](#labelpositioningcalibration)                       |             `0x8f`             |     ✅     |    ✅     |
@@ -452,6 +466,17 @@ Response (`0x02`): simple.
        │  └─ Data length = 9
        └─ PrintStart command
 ```
+
+#### Page color values
+
+Used by the page color byte (`CC`) in the 7-byte and 9-byte variants:
+
+| Value | Name              | Meaning                                 |
+| :---: | ----------------- | --------------------------------------- |
+|  `0`  | SingleColor       | Single-color (black/white) printing     |
+|  `1`  | DoubleColor       | Two-color (black/red) printing          |
+|  `2`  | SingleColorAlt    | Alternate single-color mode             |
+|  `3`  | Grayscale         | 16-level grayscale printing             |
 
 
 ### SetPageSize
@@ -1110,7 +1135,7 @@ Data is divided into three equal chunks (chunk size = `printhead_pixels / 8 / 3`
 
 `C1 = 0`, `C2 = lowByte(total)`, `C3 = highByte(total)` — i.e. total pixel count in little-endian in bytes 2–3.
 
-`auto` mode (default in library): uses split if data fits, total otherwise.
+`auto` mode (default): uses split if data fits, total otherwise.
 
 Usually the printer works correctly when all three bytes are `0x00`.
 
@@ -1132,7 +1157,7 @@ Example:
 
 Used when **black pixel count ≤ 6**. Encodes only the positions of black pixels as unsigned 16-bit indexes. One-way (no response expected).
 
-If pixel count exceeds 6 the library throws an error and uses `PrintBitmapRow` instead.
+If the pixel count exceeds 6, `PrintBitmapRow` must be used instead.
 
 ```
 55 55 83 LL RR RR C1 C2 C3 NN II II II II ... CS aa aa
@@ -1160,6 +1185,150 @@ Example (2 black pixels at positions 10, 320):
        │  └─ Data length = 10
        └─ PrintBitmapRowIndexed command
 ```
+
+### PrintBitmapRowGray
+
+Request ID `0x8d`. One-way (no response expected). Uses the [16-bit length packet](#16-bit-length-packet) framing because a grayscale row payload can exceed 255 bytes. Grayscale printing is selected with page color `3` in [`PrintStart`](#printstart).
+
+The payload starts with a sub-command:
+
+| Sub-command | Name       | Purpose                                              |
+| :---------: | ---------- | ---------------------------------------------------- |
+|   `0x84`    | Blank rows | Advance one or more rows without sending pixel data  |
+|   `0x86`    | Data row   | One run-length encoded grayscale row                 |
+
+These sub-command values are scoped to the `0x8d` payload. The same byte values are also standalone command IDs elsewhere in the protocol.
+
+Grayscale dots use 16 levels: `0` = white, `15` = black. Two dots are packed into each data byte, high nibble first:
+
+```
+byte = (level[2n] << 4) | level[2n + 1]
+```
+
+The row width must therefore be even. Encoders normally pad each row to a multiple of 8 columns with white (`0`) before packing.
+
+#### Blank rows (`0x84`)
+
+```
+55 55 8d LH LL 84 RH RL NN 00 CS aa aa
+       │     │  │  └──┤  │  │
+       │     │  │     │  │  └─ Zero (no pixel data)
+       │     │  │     │  └─ Repeat count (1-255)
+       │     │  │     └─ First row number (u16)
+       │     │  └─ Sub-command = 0x84 (blank rows)
+       │     └─ Data length (u16) = 5
+       └─ Command 0x8d
+```
+
+The whole row range is left blank (white). `NN` blank rows are emitted starting at row `RH RL`.
+
+Example: rows `4` and `5` blank:
+
+```
+55 55 8d 00 05 84 00 04 02 00 0a aa aa
+       │     │  │  └──┤  │  │
+       │     │  │     │  │  └─ Zero = no pixel data
+       │     │  │     │  └─ Repeat count = 2
+       │     │  │     └─ First row = 4
+       │     │  └─ Sub-command = 0x84
+       │     └─ Data length = 5
+       └─ Command 0x8d
+```
+
+#### Data rows (`0x86`)
+
+```
+55 55 8d LH LL 86 RH RL NN RC RUNS... DATA... CS aa aa
+       │     │  │  └──┤  │  │ └─────┤ └─────┤
+       │     │  │     │  │  │       │       │
+       │     │  │     │  │  │       │       └─ Packed dot data (2 dots per byte)
+       │     │  │     │  │  │       └─ Run descriptors (2 bytes each)
+       │     │  │     │  │  └─ Number of run-descriptor bytes (RC)
+       │     │  │     │  └─ Repeat count (1-255)
+       │     │  │     └─ First row number (u16)
+       │     │  └─ Sub-command = 0x86 (data row)
+       │     └─ Data length (u16)
+       └─ Command 0x8d
+```
+
+* `RC` is the byte length of the `RUNS` section, not the number of runs. Because each descriptor is two bytes, `RC = 2 * runCount`.
+* `DATA` contains the row's packed dots with run dots removed, except for the first data byte of each run.
+* `Data length = 5 + RC + DATA.length`.
+* `NN` repeats the same row `NN` times. Repeat counts are one byte, so a repeated row range longer than `255` is split into multiple packets; the row number of each subsequent packet advances by the number of rows already sent.
+
+#### Run-length encoding
+
+A row is encoded from its 4-bit dot levels before the packet is built.
+
+1. Expand `DATA` into dot levels, high nibble first.
+2. Walk the dots in pairs. For each pair `(a, b)`, append `(a << 4) | b` to the output `DATA`.
+3. If `a != b`, continue with the next pair.
+4. If `a == b`, count the following dots that have the same level. The count is limited to `252` and rounded down to an even number.
+5. If the count is less than `6`, do not emit a run. The total run would be shorter than 8 dots, so storing it literally is not larger.
+6. Otherwise, the run length is `count + 2` (the initial pair plus the counted dots). Emit a descriptor and skip the `count` dots; the skipped dots are reconstructed by the printer.
+7. An encoder may stop emitting new runs after a fixed number of descriptors and store the remaining dots literally. A common limit is 126 run descriptors per row.
+
+A run descriptor is two bytes:
+
+```
+run[0] = runLength | ((dataPos >> 8) & 1)
+run[1] = dataPos & 0xFF
+
+runLength = run[0] & 0xFE
+dataPos   = ((run[0] & 0x01) << 8) | run[1]
+```
+
+* `runLength` is the number of dots produced by the run, always even, in the range `8-254`.
+* The low bit of `run[0]` carries bit 8 of `dataPos`; this is possible because `runLength` always has bit 0 clear.
+* `dataPos` is a 9-bit index (`0-511`) into `DATA`, pointing at the first data byte of the run.
+* The printer repeats the last dot of the referenced data byte until `runLength` dots have been produced.
+
+#### Examples
+
+Row `0x0102`, repeat `1`, no runs, dots `1 2 3 4 5 6 7 8`:
+
+```
+55 55 8d 00 09 86 01 02 01 00 12 34 56 78 08 aa aa
+       │     │  │  └──┤  │  │  └────────┤
+       │     │  │     │  │  │           └─ DATA = 12 34 56 78 (levels 1,2 / 3,4 / 5,6 / 7,8)
+       │     │  │     │  │  └─ RC = 0 (no runs)
+       │     │  │     │  └─ Repeat = 1
+       │     │  │     └─ Row = 0x0102
+       │     │  └─ Sub-command = 0x86
+       │     └─ Data length = 9
+       └─ Command 0x8d
+```
+
+32 dots of level `5` (16 bytes of `0x55`), row `0`, repeat `1`:
+
+```
+55 55 8d 00 08 86 00 00 01 02 20 00 55 75 aa aa
+       │     │  │     └──┤  │  └──┤  │
+       │     │  │        │  │     │  └─ DATA = 55 (two level-5 dots)
+       │     │  │        │  │     └─ RUNS = 20 00 (run length 32, data position 0)
+       │     │  │        │  └─ RC = 2 (one descriptor)
+       │     │  │        └─ Row = 0, repeat = 1
+       │     │  └─ Sub-command = 0x86
+       │     └─ Data length = 8
+       └─ Command 0x8d
+```
+
+#### Encoding grayscale image pixels
+
+1. Convert each RGB pixel to a 4-bit level using inverted ITU-R BT.601 luminance:
+
+   ```
+   Y     = 0.299 * R + 0.587 * G + 0.114 * B
+   level = clamp(round((1 - Y / 255) * 15), 0, 15)
+   ```
+
+   White becomes `0`; black becomes `15`.
+
+2. Pad the row to an even number of columns with white (level `0`). Padding to a multiple of 8 is common because the non-grayscale row encoders operate on 8-pixel blocks.
+3. Pack consecutive dot pairs into bytes, high nibble first.
+4. If every dot in a row is `0`, send it as a blank row (`0x84`) instead of a data row (`0x86`).
+5. Merge consecutive identical rows into one packet by increasing `NN`.
+6. Printers that support 16-level grayscale report their maximum grayscale buffer size in `GetPrinterCapabilities` field `0x20` (`SixteenGrayMaxBuffer`).
 
 ### CompressCommand
 
