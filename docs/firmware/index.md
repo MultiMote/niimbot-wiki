@@ -53,3 +53,5 @@ First seen in B1 PRO. Compressed with DEFLATE algorithm.
 | `...`  | 4      | `XX XX XX XX` | Next block uncompressed size                                        |
 | `...`  | ?      | `...`         | Next block raw DEFLATE data                                         |
 | `...`  | ...    | ...           | Repeated until entire firmware is represented                       |
+
+[Firmware repacker](firmware-repacker.html) (works in browser)
