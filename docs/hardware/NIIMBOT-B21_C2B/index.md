@@ -19,12 +19,12 @@
 
 ## HW 40.10
 
-| Parameter                         | Value                                                                       |
-| --------------------------------- | --------------------------------------------------------------------------- |
-| MCU                               | [Artery AT32F403ARCT7](https://www.arterychip.com/en/product/AT32F403A.jsp) |
-| Firmware base address             | 0x8002000                                                                   |
-| Unique printer ID segment address | 0x803f000                                                                   |
-| Firmware file offset              | 0                                                                           |
+| Parameter             | Value                                                                       |
+| --------------------- | --------------------------------------------------------------------------- |
+| MCU                   | [Artery AT32F403ARCT7](https://www.arterychip.com/en/product/AT32F403A.jsp) |
+| Firmware base address | 0x8002000                                                                   |
+| Factory data segment  | 0x803f000                                                                   |
+| Firmware file offset  | 0                                                                           |
 
 ![pcb_top_boot](../files/b21_c2b/b21_c2b_pcb_top_boot.jpg)
 
