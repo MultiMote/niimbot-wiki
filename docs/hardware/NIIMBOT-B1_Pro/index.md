@@ -32,7 +32,7 @@
 
 B1 PRO uses [compressed firmware file payload](../../firmware/index.md#structure-of-compressed-firmware-file).
 
-![pcb_2](../files/b1_pro/B1_Pro_pcb_2.jpg?2)
+![pcb_2](../files/b1_pro/B1_Pro_pcb_2.jpg)
 
 ![pcb_1](../files/b1_pro/B1_Pro_pcb_1.jpg)
 
